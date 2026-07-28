@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  OzinsheDemo
+
+  Created by Allan Auezkhan on 13.07.2026.
+  
+*/
+"profile_title" = "Профиль";
+"my_profile" = "Менің профилім";
+"personal_data" = "Жеке деректер";
+"change_password" = "Құпия сөзді өзгерту";
+"language" = "Тіл";
+"terms_and_conditions" = "Ережелер мен шарттар";
+"notifications" = "Хабарландырулар";
+"dark_mode" = "Қараңғы режим";
+"edit" = "Өңдеу";

@@ -1,0 +1,17 @@
+/* 
+  Localizable.strings
+  OzinsheDemo
+
+  Created by Allan Auezkhan on 13.07.2026.
+  
+*/
+
+"profile_title" = "Profile";
+"my_profile" = "My Profile";
+"personal_data" = "Personal Data";
+"change_password" = "Change Password";
+"language" = "Language";
+"terms_and_conditions" = "Terms & Conditions";
+"notifications" = "Notifications";
+"dark_mode" = "Dark Mode";
+"edit" = "Edit";
