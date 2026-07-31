@@ -8,13 +8,12 @@
 import UIKit
 import SnapKit
 
-
-
 protocol LanguageViewControllerDelegate: AnyObject {
     func didSelectLanguage(_ language: String)
 }
 
 class LanguageViewController: UIViewController {
+    
     // MARK: - Properties
     
     weak var delegate: LanguageViewControllerDelegate?
@@ -27,8 +26,8 @@ class LanguageViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "language".localized()
-        label.font = UIFont(name: "SFProDisplay-Semibold", size: 24) ?? .boldSystemFont(ofSize: 24)
-        label.textColor = UIColor(named: "1C2431") ?? .black
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 20) ?? .boldSystemFont(ofSize: 20)
+        label.textColor = UIColor(red: 0.11, green: 0.14, blue: 0.19, alpha: 1.0)
         return label
     }()
     
@@ -45,8 +44,6 @@ class LanguageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        self.preferredContentSize = CGSize(width: view.bounds.width, height: 100)
 
         loadSavedSelection()
         setupUI()
@@ -69,7 +66,7 @@ class LanguageViewController: UIViewController {
             button.addTarget(self, action: #selector(languageRowTapped(_:)), for: .touchUpInside)
             
             button.snp.makeConstraints { make in
-                make.height.equalTo(60)
+                make.height.equalTo(54)
             }
         }
 
@@ -79,8 +76,9 @@ class LanguageViewController: UIViewController {
         }
 
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(24)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(16)
         }
         
         updateCheckmarks()
@@ -94,8 +92,8 @@ class LanguageViewController: UIViewController {
         
         let label = UILabel()
         label.text = title
-        label.font = UIFont(name: "SFProDisplay-Semibold", size: 16) ?? .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = UIColor(named: "1C2431") ?? .black
+        label.font = UIFont(name: "SFProDisplay-Semibold", size: 16) ?? .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = UIColor(red: 0.11, green: 0.14, blue: 0.19, alpha: 1.0)
         button.addSubview(label)
         
         label.snp.makeConstraints { make in
@@ -103,8 +101,9 @@ class LanguageViewController: UIViewController {
             make.leading.equalToSuperview()
         }
         
-        let checkmark = UIImageView(image: UIImage(systemName: "checkmark.circle.fill"))
-        checkmark.tintColor = UIColor(red: 0.59, green: 0.33, blue: 0.94, alpha: 1.0)
+        let checkmark = UIImageView()
+        checkmark.image = UIImage(named: "Check")
+        checkmark.contentMode = .scaleAspectFit
         checkmark.tag = 999
         checkmark.isHidden = true
         button.addSubview(checkmark)
@@ -115,13 +114,15 @@ class LanguageViewController: UIViewController {
             make.width.height.equalTo(24)
         }
         
-        let separator = UIView()
-        separator.backgroundColor = UIColor.systemGray5
-        button.addSubview(separator)
-        
-        separator.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(1)
+        if tag < 2 {
+            let separator = UIView()
+            separator.backgroundColor = UIColor(red: 0.92, green: 0.93, blue: 0.95, alpha: 1.0)
+            button.addSubview(separator)
+            
+            separator.snp.makeConstraints { make in
+                make.leading.trailing.bottom.equalToSuperview()
+                make.height.equalTo(1)
+            }
         }
         
         return button
@@ -140,10 +141,7 @@ class LanguageViewController: UIViewController {
         default: selectedLanguage = "Қазақша"
         }
         
-        
         UserDefaults.standard.set(selectedLanguage, forKey: "selectedLanguage")
-        
-        
         delegate?.didSelectLanguage(selectedLanguage)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
@@ -168,6 +166,3 @@ class LanguageViewController: UIViewController {
         }
     }
 }
-
-
-
