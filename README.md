@@ -5,7 +5,8 @@ A modern iOS application built with UIKit programmatic UI, focused on delivering
 ---
 
 ## 📸 Screenshots
- <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 30" src="https://github.com/user-attachments/assets/58997af2-1933-4851-90e5-343d681b5359" /><img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 22" src="https://github.com/user-attachments/assets/02774e32-1f57-41dd-9ee9-dff812b17e87" />
+ <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 22" src="https://github.com/user-attachments/assets/02774e32-1f57-41dd-9ee9-dff812b17e87" />
+ <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 30" src="https://github.com/user-attachments/assets/58997af2-1933-4851-90e5-343d681b5359" />
 <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 32" src="https://github.com/user-attachments/assets/43e7f789-d9a3-43b4-85bd-669cdb29401f" />
 <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 35" src="https://github.com/user-attachments/assets/6efa9d51-123d-4f51-8203-62c218dd82f0" />
 
