@@ -1,4 +1,4 @@
-# Ozinshe App
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 39" src="https://github.com/user-attachments/assets/ada47917-9ed0-4a10-ab8c-48c74fd8d0c6" /># Ozinshe App
 
 A modern iOS streaming app client built 100% programmatically with UIKit and SnapKit, focused on delivering a clean user interface, localized experience, and smooth modal interactions.
 
@@ -6,11 +6,10 @@ A modern iOS streaming app client built 100% programmatically with UIKit and Sna
 
 ## 📸 Screenshots
 
-![Uploading Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20.08.39.png…]()
-<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 35" src="https://github.com/user-attachments/assets/50fafaaa-be4b-4aac-ab83-5a62a9bb95dc" />
-<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 30" src="https://github.com/user-attachments/assets/cb23e226-149d-4609-881c-6b0d4f9eda0a" />
 <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 26" src="https://github.com/user-attachments/assets/1e36d5a9-ed0e-49b6-babe-dd9c5fcb856e" />
-
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 30" src="https://github.com/user-attachments/assets/cb23e226-149d-4609-881c-6b0d4f9eda0a" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 35" src="https://github.com/user-attachments/assets/50fafaaa-be4b-4aac-ab83-5a62a9bb95dc" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 39" src="https://github.com/user-attachments/assets/c1dcadd8-0673-4d06-8c8c-8ea8a5bc92c5" />
 
 
 ---
