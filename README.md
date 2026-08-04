@@ -1,47 +1,99 @@
 # Ozinshe App
 
-A modern iOS application built with UIKit programmatic UI, focused on delivering a clean user interface and smooth user experience.
+A modern iOS streaming app client built 100% programmatically with UIKit and SnapKit, focused on delivering a clean user interface, localized experience, and smooth modal interactions.
 
 ---
 
 ## 📸 Screenshots
- <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 22" src="https://github.com/user-attachments/assets/02774e32-1f57-41dd-9ee9-dff812b17e87" />
- <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 30" src="https://github.com/user-attachments/assets/58997af2-1933-4851-90e5-343d681b5359" />
-<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 32" src="https://github.com/user-attachments/assets/43e7f789-d9a3-43b4-85bd-669cdb29401f" />
-<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-07-31 at 21 39 35" src="https://github.com/user-attachments/assets/6efa9d51-123d-4f51-8203-62c218dd82f0" />
+
+![Uploading Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20.08.39.png…]()
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 35" src="https://github.com/user-attachments/assets/50fafaaa-be4b-4aac-ab83-5a62a9bb95dc" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 30" src="https://github.com/user-attachments/assets/cb23e226-149d-4609-881c-6b0d4f9eda0a" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-04 at 20 08 26" src="https://github.com/user-attachments/assets/1e36d5a9-ed0e-49b6-babe-dd9c5fcb856e" />
 
 
 
 ---
 
-## 🛠 Features (So Far)
+## 🛠 Key Features
 
-* **Profile & Settings View:**
-  * Fully programmatic UI layout using **SnapKit** (no Storyboards/XIBs).
-  * Navigation header with custom action buttons.
-  * Localized strings support (Russian, Kazakh, English).
-  * Custom modal presentation for language selection with blurred background effects.
-  * Adaptive design matching pixel-perfect design specifications.
+* **Profile & Settings Management (`ProfileViewController`):**
+* Fully programmatic UI built with **SnapKit** (zero Storyboards/XIBs).
+
+
+* Custom `ImageSwitch` components for notifications and theme settings.
+
+
+* Animated background blur overlay (`UIVisualEffectView`) during modal presentations.
+
+
+* Integrated logout flow via `UIAlertController` sheet with root view controller replacement transition.
+
+
+
+
+* **Language Selection Modal (`LanguageViewController`):**
+* Custom `UISheetPresentationController` modal with custom detents and corner radiuses.
+
+
+* Delegate pattern (`LanguageViewControllerDelegate`) for real-time localized UI updates without view reloading.
+
+
+* Persistent language preferences managed through `UserDefaults`.
+
+
+
+
+* **Navigation & Tab Bar (`TabBarViewController`):**
+* Multi-tab navigation architecture managing Home, Search, Favorites, and Profile sections.
+
+
+* Custom `UINavigationBarAppearance` styling with standardized back/action bar items.
+
+
+
+
+* **Localization (`Localizable.strings`):**
+* Multi-language support (English, Kazakh, Russian) with dynamic runtime switching.
+
+
+
+
 
 ---
 
 ## 🚀 Tech Stack & Architecture
 
-* **Language:** Swift 5
-* **UI Framework:** UIKit (Programmatic Layout)
-* **Auto Layout:** SnapKit
-* **Architecture:** MVC (Refactor to MVVM/VIPER planned for future updates)
-* **Dependency Management:** CocoaPods / Swift Package Manager
+* **Language:** Swift 5+
+* **UI Framework:** UIKit (100% Programmatic)
+
+
+* **Auto Layout:** SnapKit DSL
+
+
+* **Architecture:** MVC (Refactor to MVVM planned)
+* **Data Persistence:** `UserDefaults`
+
 
 ---
 
-## 📌 Roadmap / Work in Progress
+## 📌 Roadmap & Progress
 
-- [x] Build out initial Profile screen UI & localizations
-- [ ] Connect profile user data to backend API / Firebase
-- [ ] Add dynamic dark mode switching logic
-- [ ] Implement user authorization and logout flow
-- [ ] Refactor controllers into MVVM architecture with view models
+* [x] Programmatic Tab Bar and Navigation infrastructure
 
----
 
+* [x] Complete Profile UI with SnapKit layout constraints
+
+
+* [x] Custom sheet modal presentation & blur effect integration
+
+
+* [x] Dynamic multi-language localization & `UserDefaults` persistence
+
+
+* [x] Logout alert and root controller transition handling
+
+
+* [ ] Connect profile user data to backend API / Firebase
+* [ ] Implement full Dark Mode theme switching logic
+* [ ] Refactor Profile controller to MVVM architecture
