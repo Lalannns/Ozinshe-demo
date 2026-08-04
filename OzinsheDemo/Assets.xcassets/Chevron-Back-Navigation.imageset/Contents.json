@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Chevron-Back-Navigation.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

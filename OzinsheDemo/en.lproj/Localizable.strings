@@ -15,3 +15,7 @@
 "notifications" = "Notifications";
 "dark_mode" = "Dark Mode";
 "edit" = "Edit";
+"logout" = "Logout";
+"alert" = "Are you sure you want to logout?";
+"yes" = "Exit";
+"no" = "Stay";

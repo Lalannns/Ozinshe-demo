@@ -7,30 +7,32 @@
 
 import UIKit
 
-class TabBarViewController: UITabBarController {
+ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         
         setupTabs()
     }
-    
-    func setupTabs() {
-        let HomeVC = HomeViewController()
-        let SearchVC = SearchViewController()
-        let FavoriteVC = FavoritesViewController()
-        let ProfileVC = ProfileViewController()
-        
-        
+
+    private func setupTabs() {
+        let HomeVC = UINavigationController(rootViewController: HomeViewController())
         HomeVC.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "Home"), selectedImage: UIImage(named: "Home"))
+
+        let SearchVC = UINavigationController(rootViewController: SearchViewController())
         SearchVC.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "Search"), selectedImage: UIImage(named: "Search"))
-        FavoriteVC.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "Favorites"), selectedImage: UIImage(named: "Favorites"))
+
+        let FavoritesVC = UINavigationController(rootViewController: FavoritesViewController())
+        FavoritesVC.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "Favorites"), selectedImage: UIImage(named: "Favorites"))
+
+        let ProfileVC = UINavigationController(rootViewController: ProfileViewController())
         ProfileVC.tabBarItem = UITabBarItem(title: "", image: UIImage(named: "Profile"), selectedImage: UIImage(named: "Profile"))
-        
-        setViewControllers([HomeVC,SearchVC,FavoriteVC,ProfileVC], animated: false)
+
+        setViewControllers([HomeVC, SearchVC, FavoritesVC, ProfileVC], animated: false)
     }
+
     
 
     /*
