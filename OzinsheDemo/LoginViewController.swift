@@ -17,31 +17,31 @@ class LoginViewController: UIViewController {
     
     
     lazy var welcomeTitle = {
-        var welcomeTitle = UILabel()
-        welcomeTitle.text = "login_hello".localized()
-        welcomeTitle.font = UIFont(name: "SFProDisplay-Bold", size: 14)
-        welcomeTitle.textColor = UIColor(named: "111827")
+        let label = UILabel()
+        label.text = "login_hello".localized()
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 14)
+        label.textColor = UIColor(named: "111827")
         
-        return welcomeTitle
+        return label
     }()
     
     lazy var welcomeSubtitle = {
-        var welcomeSubtitle = UILabel()
-        welcomeSubtitle.text = "login_instruction".localized()
-        welcomeSubtitle.font = UIFont(name: "SFProDisplay-Bold", size: 14)
-        welcomeSubtitle.textColor = UIColor(named: "111827")
+        var label = UILabel()
+        label.text = "login_instruction".localized()
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 14)
+        label.textColor = UIColor(named: "111827")
         
-        return welcomeSubtitle
+        return label
     }()
     
     lazy var emailLabel = {
-        let emailLabel = UILabel()
+        let label = UILabel()
         
-        emailLabel.text = "Email"
-        emailLabel.font = UIFont(name: "SFProDisplay-Bold", size: 14)
-        emailLabel.textColor = UIColor(named: "111827")
+        label.text = "Email"
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 14)
+        label.textColor = UIColor(named: "111827")
         
-        return emailLabel
+        return label
     }()
     
     
@@ -52,20 +52,38 @@ class LoginViewController: UIViewController {
     }()
     
     lazy var passwordLabel = {
-        var passwordLabel = UILabel()
+        var label = UILabel()
         
-        passwordLabel.text = "password".localized()
-        passwordLabel.font = UIFont(name: "SFProDisplay-Bold", size: 14)
-        passwordLabel.textColor = UIColor(named: "111827")
+        label.text = "password".localized()
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 14)
+        label.textColor = UIColor(named: "111827")
         
-        return passwordLabel
+        return label
     }()
     
     
     lazy var passwordTextField = {
-        let passwordTextField = UITextField()
+        let textField = UITextField()
         
-        return passwordTextField
+        textField.isSecureTextEntry = true
+                textField.layer.cornerRadius = 12
+                textField.layer.borderWidth = 1
+                textField.layer.borderColor = UIColor.systemGray5.cgColor
+                textField.translatesAutoresizingMaskIntoConstraints = false
+                
+                // Left Icon (Key)
+                let iconView = UIImageView(image: UIImage(named: "password"))
+                textField.leftView = iconView
+                textField.leftViewMode = .always
+                
+                // Right Icon (Eye toggle)
+                let eyeButton = UIButton(type: .custom)
+                eyeButton.setImage(UIImage(named: "show"), for: .normal)
+                eyeButton.tintColor = .gray
+                eyeButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+                textField.rightView = eyeButton
+                textField.rightViewMode = .always
+                return textField
     }()
     
     
@@ -86,6 +104,9 @@ class LoginViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
+    
+    
+    
     
     
     
