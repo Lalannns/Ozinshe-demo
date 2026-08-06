@@ -19,3 +19,5 @@
 "alert" = "Are you sure you want to logout?";
 "yes" = "Exit";
 "no" = "Stay";
+"login_hello" = "";
+"login_instruction" = "";
