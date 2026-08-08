@@ -5,18 +5,43 @@
   Created by Allan Auezkhan on 13.07.2026.
   
 */
+/* Profile */
 "profile_title" = "Профиль";
-"my_profile" = "Менің профилім";
+"my_profile" = "Жеке деректер";
 "personal_data" = "Жеке деректер";
 "change_password" = "Құпия сөзді өзгерту";
 "language" = "Тіл";
-"terms_and_conditions" = "Ережелер мен шарттар";
+"terms_and_conditions" = "Шарттар мен ережелер";
 "notifications" = "Хабарландырулар";
-"dark_mode" = "Қараңғы режим";
+"dark_mode" = "Түнгі режим";
 "edit" = "Өңдеу";
 "logout" = "Шығу";
-"alert" = "Сіз шынымен аккаунтыңыздан шыққыңыз келе ме?";
+"alert" = "Шынымен шыққыңыз келе ме?";
 "yes" = "Шығу";
 "no" = "Қалу";
-"login_hello" = "";
-"login_instruction" = "";
+
+/* Login */
+"login_hello" = "Сәлем";
+"login_instruction" = "Аккаунтқа кіріңіз";
+"email" = "Email";
+"email_placeholder" = "Сіздің email";
+"password" = "Құпия сөз";
+"password_placeholder" = "Сіздің құпия сөзіңіз";
+"password_forgot" = "Құпия сөзді ұмыттыңыз ба?";
+"login_button" = "Кіру";
+"no_account_prompt" = "Аккаунтыңыз жоқ па?";
+"signup_link" = "Тіркелу";
+
+
+/* Sign Up */
+"signup_title" = "Тіркелу";
+"signup_subtitle" = "Жаңа аккаунт жасаңыз";
+"confirm_password" = "Құпия сөзді қайталаңыз";
+"confirm_password_placeholder" = "Құпия сөзді қайта енгізіңіз";
+"already_have_account" = "Аккаунтыңыз бар ма?";
+"login_link" = "Кіру";
+
+/* Forgot Password */
+"forgot_password_title" = "Құпия сөзді қалпына келтіру";
+"forgot_password_instruction" = "Құпия сөзді қалпына келтіру сілтемесін алу үшін email енгізіңіз";
+"send" = "Жіберу";

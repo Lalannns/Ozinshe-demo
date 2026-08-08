@@ -6,18 +6,43 @@
   
 */
 
+/* Profile */
 "profile_title" = "Профиль";
-"my_profile" = "Мой профиль";
-"personal_data" = "Персональные данные";
+"my_profile" = "Личные данные";
+"personal_data" = "Личные данные";
 "change_password" = "Сменить пароль";
 "language" = "Язык";
-"terms_and_conditions" = "Условия и положения";
+"terms_and_conditions" = "Условия и соглашения";
 "notifications" = "Уведомления";
 "dark_mode" = "Темный режим";
 "edit" = "Редактировать";
 "logout" = "Выйти";
-"alert" = "Вы точно хотите выйти из учетной записи?";
+"alert" = "Вы действительно хотите выйти?";
 "yes" = "Выйти";
 "no" = "Остаться";
-"login_hello" = "";
-"login_instruction" = "";
+
+/* Login */
+"login_hello" = "Привет";
+"login_instruction" = "Войдите в аккаунт";
+"email" = "Email";
+"email_placeholder" = "Ваш email";
+"password" = "Пароль";
+"password_placeholder" = "Ваш пароль";
+"password_forgot" = "Забыли пароль?";
+"login_button" = "Войти";
+"no_account_prompt" = "Нет аккаунта?";
+"signup_link" = "Зарегистрироваться";
+
+
+/* Sign Up */
+"signup_title" = "Регистрация";
+"signup_subtitle" = "Создайте новый аккаунт";
+"confirm_password" = "Повторите пароль";
+"confirm_password_placeholder" = "Повторите ваш пароль";
+"already_have_account" = "Уже есть аккаунт?";
+"login_link" = "Войти";
+
+/* Forgot Password */
+"forgot_password_title" = "Сброс пароля";
+"forgot_password_instruction" = "Введите ваш email для получения ссылки на сброс пароля";
+"send" = "Отправить"; 

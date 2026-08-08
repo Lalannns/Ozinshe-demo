@@ -6,8 +6,9 @@
   
 */
 
+/* Profile */
 "profile_title" = "Profile";
-"my_profile" = "My Profile";
+"my_profile" = "Personal Data";
 "personal_data" = "Personal Data";
 "change_password" = "Change Password";
 "language" = "Language";
@@ -18,6 +19,30 @@
 "logout" = "Logout";
 "alert" = "Are you sure you want to logout?";
 "yes" = "Exit";
-"no" = "Stay";
-"login_hello" = "";
-"login_instruction" = "";
+"no" = "Cancel";
+
+/* Login */
+"login_hello" = "Hello";
+"login_instruction" = "Sign in to your account";
+"email" = "Email";
+"email_placeholder" = "Your email";
+"password" = "Password";
+"password_placeholder" = "Your password";
+"password_forgot" = "Forgot password?";
+"login_button" = "Sign In";
+"no_account_prompt" = "Don't have an account?";
+"signup_link" = "Register";
+
+
+/* Sign Up */
+"signup_title" = "Registration";
+"signup_subtitle" = "Create a new account";
+"confirm_password" = "Repeat password";
+"confirm_password_placeholder" = "Repeat your password";
+"already_have_account" = "Already have an account?";
+"login_link" = "Sign In";
+
+/* Forgot Password */
+"forgot_password_title" = "Reset Password";
+"forgot_password_instruction" = "Enter your email to receive a password reset link";
+"send" = "Send";
