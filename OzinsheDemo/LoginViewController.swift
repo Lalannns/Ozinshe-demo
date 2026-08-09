@@ -284,7 +284,8 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func signUpTapped() {
-        // Navigate to Register screen
+        let signInVC = SignInViewController()
+        navigationController?.pushViewController(signInVC, animated: true)
     }
     
    

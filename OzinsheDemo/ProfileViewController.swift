@@ -416,6 +416,10 @@ class ProfileViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    
+    
+    // change later to a full screen instead of alert pop-up
+    
     @objc private func didTapLogout() {
         let alert = UIAlertController(
             title: "logout".localized(),
@@ -434,6 +438,8 @@ class ProfileViewController: UIViewController {
         
         present(alert, animated: true)
     }
+    
+    
 
     private func performLogout() {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
