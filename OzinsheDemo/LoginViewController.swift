@@ -66,7 +66,6 @@ class LoginViewController: UIViewController {
         textField.autocapitalizationType = .none
         textField.keyboardType = .emailAddress
         
-        // Left Icon (Mail)
         let iconView = UIImageView(image: UIImage(named: "Message") ?? UIImage(systemName: "envelope"))
         iconView.tintColor = .systemGray
         iconView.contentMode = .scaleAspectFit
@@ -97,7 +96,6 @@ class LoginViewController: UIViewController {
         textField.layer.borderWidth = 1
         textField.layer.borderColor = (UIColor(named: "E5E7EB") ?? UIColor.systemGray5).cgColor
         
-        // Left Icon (Key)
         let keyIcon = UIImageView(image: UIImage(named: "Password") ?? UIImage(systemName: "key"))
         keyIcon.tintColor = .systemGray
         keyIcon.contentMode = .scaleAspectFit
@@ -108,22 +106,18 @@ class LoginViewController: UIViewController {
         textField.leftView = leftPaddingView
         textField.leftViewMode = .always
         
-        // Right Icon (Eye Toggle)
-            let rightContainer = UIView(frame: CGRect(x: 0, y: 0, width: 48, height: 48))
-            
-            let eyeButton = UIButton(type: .custom)
-            eyeButton.setImage(UIImage(named: "Show"), for: .normal)
-            eyeButton.tintColor = .gray
-            // Position button inside container to create a 16pt right inset padding
-            eyeButton.frame = CGRect(x: 12, y: 14, width: 20, height: 20)
-            eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-            
-            rightContainer.addSubview(eyeButton)
-            
-            textField.rightView = rightContainer
-            textField.rightViewMode = .always
-            
-            return textField
+        let rightContainer = UIView(frame: CGRect(x: 0, y: 0, width: 48, height: 48))
+        let eyeButton = UIButton(type: .custom)
+        eyeButton.setImage(UIImage(named: "Show"), for: .normal)
+        eyeButton.tintColor = .gray
+        eyeButton.frame = CGRect(x: 12, y: 14, width: 20, height: 20)
+        eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        
+        rightContainer.addSubview(eyeButton)
+        textField.rightView = rightContainer
+        textField.rightViewMode = .always
+        
+        return textField
     }()
     
     private lazy var passwordForgotButton: UIButton = {
@@ -151,26 +145,27 @@ class LoginViewController: UIViewController {
         return button
     }()
     
+    private lazy var signUpButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("signup_link".localized(), for: .normal)
+        button.setTitleColor(UIColor(named: "B376F7") ?? UIColor.systemPurple, for: .normal)
+        button.titleLabel?.font = UIFont(name: "SFProDisplay-Bold", size: 14) ?? .boldSystemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
+        return button
+    }()
+    
     private lazy var signUpPromptStackView: UIStackView = {
         let label = UILabel()
         label.text = "no_account_prompt".localized()
         label.font = UIFont(name: "SFProDisplay-Regular", size: 14) ?? .systemFont(ofSize: 14)
         label.textColor = UIColor(named: "6B7280") ?? .gray
         
-        let button = UIButton(type: .system)
-        button.setTitle("signup_link".localized(), for: .normal)
-        button.setTitleColor(UIColor(named: "B376F7") ?? UIColor.systemPurple, for: .normal)
-        button.titleLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 14) ?? .boldSystemFont(ofSize: 14)
-        button.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
-        
-        let stack = UIStackView(arrangedSubviews: [label, button])
+        let stack = UIStackView(arrangedSubviews: [label, signUpButton])
         stack.axis = .horizontal
         stack.spacing = 4
         stack.alignment = .center
         return stack
     }()
-    
-    
 
     // MARK: - Lifecycle
     
@@ -196,7 +191,6 @@ class LoginViewController: UIViewController {
         contentView.addSubview(passwordForgotButton)
         contentView.addSubview(loginButton)
         contentView.addSubview(signUpPromptStackView)
-       
         
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -259,8 +253,8 @@ class LoginViewController: UIViewController {
         signUpPromptStackView.snp.makeConstraints { make in
             make.top.equalTo(loginButton.snp.bottom).offset(24)
             make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-24)
         }
-        
     }
     
     // MARK: - Actions
@@ -287,6 +281,4 @@ class LoginViewController: UIViewController {
         let signInVC = SignInViewController()
         navigationController?.pushViewController(signInVC, animated: true)
     }
-    
-   
 }
