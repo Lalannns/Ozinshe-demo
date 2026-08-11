@@ -319,7 +319,7 @@ class SignInViewController: UIViewController {
         // Execute registration
     }
 
-    
+    //Must: handle password matching logic and error calls 
     
     
     
