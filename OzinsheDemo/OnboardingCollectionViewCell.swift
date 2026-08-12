@@ -25,8 +25,8 @@ class OnboardingSlideCell: UICollectionViewCell {
     // Title Label ("ÖZINŞE-ге кош келдің!")
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 24)
-        label.textColor = .white
+        label.font = UIFont(name: "SFProDisplay-Bold", size: 24)
+        label.textColor = UIColor(named: "111827")
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -36,8 +36,8 @@ class OnboardingSlideCell: UICollectionViewCell {
     // Description / Subtitle Label
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = UIColor(red: 156/255, green: 163/255, blue: 175/255, alpha: 1.0) // Gray subtitle text
+        label.font = UIFont(name: "SFProDisplay-Regular", size: 14)
+        label.textColor = UIColor(named: "6B7280")
         label.textAlignment = .center
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -70,9 +70,9 @@ class OnboardingSlideCell: UICollectionViewCell {
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             // Subtitle constraints (positioned toward the bottom area above page control)
-            subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -150),
-            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 32),
-            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
+            subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -310),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             
             // Title constraints (positioned directly above the subtitle)
             titleLabel.bottomAnchor.constraint(equalTo: subtitleLabel.topAnchor, constant: -12),

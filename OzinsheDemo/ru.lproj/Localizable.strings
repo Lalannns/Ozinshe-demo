@@ -6,6 +6,44 @@
   
 */
 
+/* Onboarding */
+"onboarding_title_1" = "Добро пожаловать в ÖZINŞE!";
+"onboarding_subtitle_1" = "Фильмы, сериалы, ситкомы, анимационные проекты, телепередачи, реалити-шоу, аниме и многое другое";
+
+"onboarding_title_2" = "Добро пожаловать в ÖZINŞE!";
+"onboarding_subtitle_2" = "Смотрите на любом устройстве\nСмотрите любимый фильм без дополнительной платы с телефона, планшета или ноутбука";
+
+"onboarding_title_3" = "Добро пожаловать в ÖZINŞE!";
+"onboarding_subtitle_3" = "Зарегистрироваться легко. Зарегистрируйтесь сейчас и получите доступ к желаемому фильму";
+
+"skip" = "Пропустить";
+"next" = "Далее";
+
+/* Login */
+"login_hello" = "Привет";
+"login_instruction" = "Войдите в аккаунт";
+"email" = "Email";
+"email_placeholder" = "Ваш email";
+"password" = "Пароль";
+"password_placeholder" = "Ваш пароль";
+"password_forgot" = "Забыли пароль?";
+"login_button" = "Войти";
+"no_account_prompt" = "Нет аккаунта?";
+"signup_link" = "Зарегистрироваться";
+
+/* Sign Up */
+"signup_title" = "Регистрация";
+"signup_subtitle" = "Создайте новый аккаунт";
+"confirm_password" = "Повторите пароль";
+"confirm_password_placeholder" = "Повторите ваш пароль";
+"already_have_account" = "Уже есть аккаунт?";
+"login_link" = "Войти";
+
+/* Forgot Password */
+"forgot_password_title" = "Сброс пароля";
+"forgot_password_instruction" = "Введите ваш email для получения ссылки на сброс пароля";
+"send" = "Отправить";
+
 /* Profile */
 "profile_title" = "Профиль";
 "my_profile" = "Личные данные";
@@ -20,29 +58,3 @@
 "alert" = "Вы действительно хотите выйти?";
 "yes" = "Выйти";
 "no" = "Остаться";
-
-/* Login */
-"login_hello" = "Привет";
-"login_instruction" = "Войдите в аккаунт";
-"email" = "Email";
-"email_placeholder" = "Ваш email";
-"password" = "Пароль";
-"password_placeholder" = "Ваш пароль";
-"password_forgot" = "Забыли пароль?";
-"login_button" = "Войти";
-"no_account_prompt" = "Нет аккаунта?";
-"signup_link" = "Зарегистрироваться";
-
-
-/* Sign Up */
-"signup_title" = "Регистрация";
-"signup_subtitle" = "Создайте новый аккаунт";
-"confirm_password" = "Повторите пароль";
-"confirm_password_placeholder" = "Повторите ваш пароль";
-"already_have_account" = "Уже есть аккаунт?";
-"login_link" = "Войти";
-
-/* Forgot Password */
-"forgot_password_title" = "Сброс пароля";
-"forgot_password_instruction" = "Введите ваш email для получения ссылки на сброс пароля";
-"send" = "Отправить"; 

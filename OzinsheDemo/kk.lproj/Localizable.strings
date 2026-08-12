@@ -5,6 +5,45 @@
   Created by Allan Auezkhan on 13.07.2026.
   
 */
+
+/* Onboarding */
+"onboarding_title_1" = "ÖZINŞE-ге кош келдің!";
+"onboarding_subtitle_1" = "Фильмдер, телехикаялар, ситкомдар, анимациялық жобалар, телебағдарламалар мен реалити-шоулар, аниме және тағы басқалары";
+
+"onboarding_title_2" = "ÖZINŞE-ге кош келдің!";
+"onboarding_subtitle_2" = "Кез келген құрылғыдан қара\nСүйікті фильміңді қосымша төлемсіз телефоннан, планшеттен, ноутбуктан қара";
+
+"onboarding_title_3" = "ÖZINŞE-ге кош келдің!";
+"onboarding_subtitle_3" = "Тіркелу оңай. Қазір тіркел де қалаған фильміңе қол жеткіз";
+
+"skip" = "Өткізу";
+"next" = "Әрі қарай";
+
+/* Login */
+"login_hello" = "Сәлем";
+"login_instruction" = "Аккаунтқа кіріңіз";
+"email" = "Email";
+"email_placeholder" = "Сіздің email";
+"password" = "Құпия сөз";
+"password_placeholder" = "Сіздің құпия сөзіңіз";
+"password_forgot" = "Құпия сөзді ұмыттыңыз ба?";
+"login_button" = "Кіру";
+"no_account_prompt" = "Аккаунтыңыз жоқ па?";
+"signup_link" = "Тіркелу";
+
+/* Sign Up */
+"signup_title" = "Тіркелу";
+"signup_subtitle" = "Жаңа аккаунт жасаңыз";
+"confirm_password" = "Құпия сөзді қайталаңыз";
+"confirm_password_placeholder" = "Құпия сөзді қайта енгізіңіз";
+"already_have_account" = "Аккаунтыңыз бар ма?";
+"login_link" = "Кіру";
+
+/* Forgot Password */
+"forgot_password_title" = "Құпия сөзді қалпына келтіру";
+"forgot_password_instruction" = "Құпия сөзді қалпына келтіру сілтемесін алу үшін email енгізіңіз";
+"send" = "Жіберу";
+
 /* Profile */
 "profile_title" = "Профиль";
 "my_profile" = "Жеке деректер";
@@ -19,29 +58,3 @@
 "alert" = "Шынымен шыққыңыз келе ме?";
 "yes" = "Шығу";
 "no" = "Қалу";
-
-/* Login */
-"login_hello" = "Сәлем";
-"login_instruction" = "Аккаунтқа кіріңіз";
-"email" = "Email";
-"email_placeholder" = "Сіздің email";
-"password" = "Құпия сөз";
-"password_placeholder" = "Сіздің құпия сөзіңіз";
-"password_forgot" = "Құпия сөзді ұмыттыңыз ба?";
-"login_button" = "Кіру";
-"no_account_prompt" = "Аккаунтыңыз жоқ па?";
-"signup_link" = "Тіркелу";
-
-
-/* Sign Up */
-"signup_title" = "Тіркелу";
-"signup_subtitle" = "Жаңа аккаунт жасаңыз";
-"confirm_password" = "Құпия сөзді қайталаңыз";
-"confirm_password_placeholder" = "Құпия сөзді қайта енгізіңіз";
-"already_have_account" = "Аккаунтыңыз бар ма?";
-"login_link" = "Кіру";
-
-/* Forgot Password */
-"forgot_password_title" = "Құпия сөзді қалпына келтіру";
-"forgot_password_instruction" = "Құпия сөзді қалпына келтіру сілтемесін алу үшін email енгізіңіз";
-"send" = "Жіберу";

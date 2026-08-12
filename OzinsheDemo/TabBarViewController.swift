@@ -33,7 +33,16 @@ import UIKit
         setViewControllers([HomeVC, SearchVC, FavoritesVC, ProfileVC], animated: false)
     }
 
-    
+     private func finishOnboarding() {
+         guard let window = view.window else { return }
+         
+         // Embed LoginVC in a NavigationController if you need navigation bar back/forward support later
+         let loginVC = UINavigationController(rootViewController: LoginViewController())
+         
+         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
+             window.rootViewController = loginVC
+         })
+     }
 
     /*
     // MARK: - Navigation

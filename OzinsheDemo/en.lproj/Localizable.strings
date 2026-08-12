@@ -6,6 +6,46 @@
   
 */
 
+
+
+/* Onboarding */
+"onboarding_title_1" = "Welcome to ÖZINŞE!";
+"onboarding_subtitle_1" = "Movies, TV series, sitcoms, animated projects, TV shows, reality shows, anime, and much more";
+
+"onboarding_title_2" = "Welcome to ÖZINŞE!";
+"onboarding_subtitle_2" = "Watch on any device\nWatch your favorite movie without additional payment on your phone, tablet, or laptop";
+
+"onboarding_title_3" = "Welcome to ÖZINŞE!";
+"onboarding_subtitle_3" = "Registration is easy. Register now and gain access to your desired movie";
+
+"skip" = "Skip";
+"next" = "Next";
+
+/* Login */
+"login_hello" = "Hello";
+"login_instruction" = "Sign in to your account";
+"email" = "Email";
+"email_placeholder" = "Your email";
+"password" = "Password";
+"password_placeholder" = "Your password";
+"password_forgot" = "Forgot password?";
+"login_button" = "Sign In";
+"no_account_prompt" = "Don't have an account?";
+"signup_link" = "Register";
+
+/* Sign Up */
+"signup_title" = "Registration";
+"signup_subtitle" = "Create a new account";
+"confirm_password" = "Repeat password";
+"confirm_password_placeholder" = "Repeat your password";
+"already_have_account" = "Already have an account?";
+"login_link" = "Sign In";
+
+/* Forgot Password */
+"forgot_password_title" = "Reset Password";
+"forgot_password_instruction" = "Enter your email to receive a password reset link";
+"send" = "Send";
+
 /* Profile */
 "profile_title" = "Profile";
 "my_profile" = "Personal Data";
@@ -20,29 +60,3 @@
 "alert" = "Are you sure you want to logout?";
 "yes" = "Exit";
 "no" = "Cancel";
-
-/* Login */
-"login_hello" = "Hello";
-"login_instruction" = "Sign in to your account";
-"email" = "Email";
-"email_placeholder" = "Your email";
-"password" = "Password";
-"password_placeholder" = "Your password";
-"password_forgot" = "Forgot password?";
-"login_button" = "Sign In";
-"no_account_prompt" = "Don't have an account?";
-"signup_link" = "Register";
-
-
-/* Sign Up */
-"signup_title" = "Registration";
-"signup_subtitle" = "Create a new account";
-"confirm_password" = "Repeat password";
-"confirm_password_placeholder" = "Repeat your password";
-"already_have_account" = "Already have an account?";
-"login_link" = "Sign In";
-
-/* Forgot Password */
-"forgot_password_title" = "Reset Password";
-"forgot_password_instruction" = "Enter your email to receive a password reset link";
-"send" = "Send";

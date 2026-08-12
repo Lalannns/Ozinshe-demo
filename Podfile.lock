@@ -1,4 +1,5 @@
 PODS:
+  - AdvancedPageControl (0.11.0)
   - Alamofire (5.12.0)
   - Localize-Swift (3.2.0):
     - Localize-Swift/LocalizeSwiftCore (= 3.2.0)
@@ -16,6 +17,7 @@ PODS:
   - SwiftyJSON (5.0.2)
 
 DEPENDENCIES:
+  - AdvancedPageControl
   - Alamofire
   - Localize-Swift
   - SDWebImage
@@ -25,6 +27,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AdvancedPageControl
     - Alamofire
     - Localize-Swift
     - SDWebImage
@@ -33,6 +36,7 @@ SPEC REPOS:
     - SwiftyJSON
 
 SPEC CHECKSUMS:
+  AdvancedPageControl: a459daef8f64873d30ea66404491dc562bed710f
   Alamofire: ddb8d5201667b256dbc225f3fc6e835a0753186f
   Localize-Swift: 6f4475136bdb0d7b2882ea3d4ea919d70142b232
   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
@@ -40,6 +44,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 4837c74bdfe2e51e8821c397825996a8d7de6e22
   SwiftyJSON: f5b1bf1cd8dd53cd25887ac0eabcfd92301c6a5a
 
-PODFILE CHECKSUM: 0b55e45a675b5f7ebb535f9a839d7754e9f29d28
+PODFILE CHECKSUM: a109f83a5a80af490b3720ef54380c1b78a57dfb
 
 COCOAPODS: 1.17.0
