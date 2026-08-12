@@ -8,11 +8,14 @@ target 'OzinsheDemo' do
   # Pods for OzinsheDemo
   
   pod 'Alamofire'
+  pod 'AdvancedPageControl'
+  pod 'Localize-Swift'
   pod 'SwiftyJSON'
   pod 'SVProgressHUD'
   pod 'SDWebImage'
   pod 'SnapKit'
-  pod 'Localize-Swift'
+
+ 
 
   target 'OzinsheDemoTests' do
     inherit! :search_paths
