@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import SwiftyJSON
+import SVProgressHUD
 
 class LoginViewController: UIViewController {
     
@@ -259,6 +262,13 @@ class LoginViewController: UIViewController {
     
     // MARK: - Actions
     
+    private func startApp() {
+        let mainTabBar = TabBarViewController()
+        mainTabBar.modalPresentationStyle = .fullScreen
+        present(mainTabBar, animated: true)
+    }
+
+    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -274,7 +284,36 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func loginButtonTapped() {
-        // Execute login
+        guard let email = emailTextField.text, !email.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty else {
+            SVProgressHUD.showError(withStatus: "Fill in all fields")
+            return
+        }
+        
+        let parameters: [String: Any] = [
+            "email": email,
+            "password": password
+        ]
+        
+        SVProgressHUD.show()
+        
+        AF.request(URLs.SIGN_IN_URL, method: .post, parameters: parameters, encoding: JSONEncoding.default).responseData { [weak self] response in
+            SVProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            
+            if response.response?.statusCode == 200 {
+                let json = JSON(response.data!)
+                if let token = json["accessToken"].string {
+                    UserDefaults.standard.set(token, forKey: "accessToken")
+                    Storage.sharedInstance.accessToken = token
+                    
+                    self.startApp()
+                }
+            } else {
+                SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
+            }
+        }
     }
     
     @objc private func signUpTapped() {
@@ -282,3 +321,4 @@ class LoginViewController: UIViewController {
         navigationController?.pushViewController(signInVC, animated: true)
     }
 }
+

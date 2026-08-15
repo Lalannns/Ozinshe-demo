@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class MovieTableViewCell: UITableViewCell {
     
@@ -138,6 +139,14 @@ class MovieTableViewCell: UITableViewCell {
         
     }
     
+    func configure(with movie: Movie) {
+        titleLabel.text = movie.name
+        subtitleLabel.text = "\(movie.year) • \(movie.categories.joined(separator: ", "))"
+        
+        if let url = URL(string: movie.posterUrl) {
+            posterImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "MoviePlaceholder"))
+        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

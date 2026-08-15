@@ -1,29 +1,28 @@
-/* 
-  Localizable.strings
+/*
+  Localizable.strings (Kazakh)
   OzinsheDemo
 
   Created by Allan Auezkhan on 13.07.2026.
-  
 */
 
 /* Onboarding */
-"onboarding_title_1" = "ÖZINŞE-ге кош келдің!";
-"onboarding_subtitle_1" = "Фильмдер, телехикаялар, ситкомдар, анимациялық жобалар, телебағдарламалар мен реалити-шоулар, аниме және тағы басқалары";
+"onboarding_title_1" = "ÖZINŞE-ге қош келдіңіз!";
+"onboarding_subtitle_1" = "Фильмдер, телехикаялар, ситкомдар, анимациялық жобалар, телебағдарламалар, реалити-шоулар, аниме және тағы басқасы";
 
-"onboarding_title_2" = "ÖZINŞE-ге кош келдің!";
-"onboarding_subtitle_2" = "Кез келген құрылғыдан қара\nСүйікті фильміңді қосымша төлемсіз телефоннан, планшеттен, ноутбуктан қара";
+"onboarding_title_2" = "ÖZINŞE-ге қош келдіңіз!";
+"onboarding_subtitle_2" = "Кез келген құрылғыдан қараңыз\nСүйікті фильміңізді смартфоныңыздан, планшетіңізден немесе ноутбугіңізден қосымша төлемсіз тамашалаңыз";
 
-"onboarding_title_3" = "ÖZINŞE-ге кош келдің!";
-"onboarding_subtitle_3" = "Тіркелу оңай. Қазір тіркел де қалаған фильміңе қол жеткіз";
+"onboarding_title_3" = "ÖZINŞE-ге қош келдіңіз!";
+"onboarding_subtitle_3" = "Тіркелу өте оңай. Қазір тіркеліп, қалаған фильміңізге қол жеткізіңіз";
 
-"skip" = "Өткізу";
-"next" = "Әрі қарай";
+"skip" = "Өткізіп жіберу";
+"next" = "Келесі";
 
 /* Login */
 "login_hello" = "Сәлем";
-"login_instruction" = "Аккаунтқа кіріңіз";
+"login_instruction" = "Аккаунтыңызға кіріңіз";
 "email" = "Email";
-"email_placeholder" = "Сіздің email";
+"email_placeholder" = "Сіздің email-іңіз";
 "password" = "Құпия сөз";
 "password_placeholder" = "Сіздің құпия сөзіңіз";
 "password_forgot" = "Құпия сөзді ұмыттыңыз ба?";
@@ -33,7 +32,7 @@
 
 /* Sign Up */
 "signup_title" = "Тіркелу";
-"signup_subtitle" = "Жаңа аккаунт жасаңыз";
+"signup_subtitle" = "Деректеріңізді толтырыңыз";
 "confirm_password" = "Құпия сөзді қайталаңыз";
 "confirm_password_placeholder" = "Құпия сөзді қайта енгізіңіз";
 "already_have_account" = "Аккаунтыңыз бар ма?";
@@ -41,20 +40,28 @@
 
 /* Forgot Password */
 "forgot_password_title" = "Құпия сөзді қалпына келтіру";
-"forgot_password_instruction" = "Құпия сөзді қалпына келтіру сілтемесін алу үшін email енгізіңіз";
+"forgot_password_instruction" = "Құпия сөзді қалпына келтіру сілтемесін алу үшін email-іңізді енгізіңіз";
 "send" = "Жіберу";
 
-/* Profile */
+/* Navigation Bar */
+"home_title" = "Басты";
+"search_title" = "Издеу";
+"favorites_title" = "Тізім";
 "profile_title" = "Профиль";
+
+/* Profile */
 "my_profile" = "Жеке деректер";
 "personal_data" = "Жеке деректер";
-"change_password" = "Құпия сөзді өзгерту";
+"change_password" = "Құпия сөзді ауыстыру";
 "language" = "Тіл";
-"terms_and_conditions" = "Шарттар мен ережелер";
+"terms_and_conditions" = "Ережелер мен шарттар";
 "notifications" = "Хабарландырулар";
-"dark_mode" = "Түнгі режим";
+"dark_mode" = "Қараңғы режим";
 "edit" = "Өңдеу";
 "logout" = "Шығу";
-"alert" = "Шынымен шыққыңыз келе ме?";
+"alert" = "Аккаунтыңыздан шығуды қалайсыз ба?";
 "yes" = "Шығу";
-"no" = "Қалу";
+"no" = "Бас тарту";
+
+/* Errors */
+"CONECTION_ERROR" = "Қосылу қатесі. Қайтадан байқап көріңіз.";

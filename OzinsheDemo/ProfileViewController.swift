@@ -442,17 +442,24 @@ class ProfileViewController: UIViewController {
     
 
     private func performLogout() {
+        // Clear token & stored user data
+        UserDefaults.standard.removeObject(forKey: "accessToken")
+        UserDefaults.standard.removeObject(forKey: "userEmail")
+        Storage.sharedInstance.accessToken = ""
+
+        // Navigate back to Onboarding/Login root
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let delegate = windowScene.delegate as? SceneDelegate,
               let window = delegate.window else { return }
-        
-        let loginVC = UINavigationController(rootViewController: LoginViewController())
-        
+
+        let onboardingVC = UINavigationController(rootViewController: OnboardingViewController())
+
         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
-            window.rootViewController = loginVC
+            window.rootViewController = onboardingVC
         }
     }
 }
+
 
 // MARK: - Language Delegate & Presentation Conformance
 

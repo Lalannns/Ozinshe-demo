@@ -14,18 +14,18 @@ class OnboardingViewController: UIViewController {
     private let slides: [OnboardingSlide] = [
         OnboardingSlide(
             imageName: "firstSlide",
-            title: NSLocalizedString("onboarding_title_1", comment: ""),
-            subtitle: NSLocalizedString("onboarding_subtitle_1", comment: "")
+            title: NSLocalizedString("onboarding_title_1".localized(), comment: ""),
+            subtitle: NSLocalizedString("onboarding_subtitle_1".localized(), comment: "")
         ),
         OnboardingSlide(
             imageName: "secondSlide",
-            title: NSLocalizedString("onboarding_title_2", comment: ""),
-            subtitle: NSLocalizedString("onboarding_subtitle_2", comment: "")
+            title: NSLocalizedString("onboarding_title_2".localized(), comment: ""),
+            subtitle: NSLocalizedString("onboarding_subtitle_2".localized(), comment: "")
         ),
         OnboardingSlide(
             imageName: "thirdSlide",
-            title: NSLocalizedString("onboarding_title_3", comment: ""),
-            subtitle: NSLocalizedString("onboarding_subtitle_3", comment: "")
+            title: NSLocalizedString("onboarding_title_3".localized(), comment: ""),
+            subtitle: NSLocalizedString("onboarding_subtitle_3".localized(), comment: "")
         )
     ]
     

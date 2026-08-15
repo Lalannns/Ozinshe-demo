@@ -1,27 +1,26 @@
-/* 
-  Localizable.strings
+/*
+  Localizable.strings (Russian)
   OzinsheDemo
 
   Created by Allan Auezkhan on 13.07.2026.
-  
 */
 
 /* Onboarding */
 "onboarding_title_1" = "Добро пожаловать в ÖZINŞE!";
-"onboarding_subtitle_1" = "Фильмы, сериалы, ситкомы, анимационные проекты, телепередачи, реалити-шоу, аниме и многое другое";
+"onboarding_subtitle_1" = "Фильмы, сериалы, ситкомы, анимационные проекты, ТВ-шоу, реалити-шоу, аниме и многое другое";
 
 "onboarding_title_2" = "Добро пожаловать в ÖZINŞE!";
-"onboarding_subtitle_2" = "Смотрите на любом устройстве\nСмотрите любимый фильм без дополнительной платы с телефона, планшета или ноутбука";
+"onboarding_subtitle_2" = "Смотрите на любом устройстве\nСмотрите любимый фильм без дополнительной платы на телефоне, планшете или ноутбуке";
 
 "onboarding_title_3" = "Добро пожаловать в ÖZINŞE!";
-"onboarding_subtitle_3" = "Зарегистрироваться легко. Зарегистрируйтесь сейчас и получите доступ к желаемому фильму";
+"onboarding_subtitle_3" = "Регистрация проста. Зарегистрируйтесь прямо сейчас и получите доступ к желаемому фильму";
 
 "skip" = "Пропустить";
 "next" = "Далее";
 
 /* Login */
 "login_hello" = "Привет";
-"login_instruction" = "Войдите в аккаунт";
+"login_instruction" = "Войдите в свой аккаунт";
 "email" = "Email";
 "email_placeholder" = "Ваш email";
 "password" = "Пароль";
@@ -33,7 +32,7 @@
 
 /* Sign Up */
 "signup_title" = "Регистрация";
-"signup_subtitle" = "Создайте новый аккаунт";
+"signup_subtitle" = "Заполните свои данные";
 "confirm_password" = "Повторите пароль";
 "confirm_password_placeholder" = "Повторите ваш пароль";
 "already_have_account" = "Уже есть аккаунт?";
@@ -44,17 +43,25 @@
 "forgot_password_instruction" = "Введите ваш email для получения ссылки на сброс пароля";
 "send" = "Отправить";
 
-/* Profile */
+/* Navigation Bar */
+"home_title" = "Главное";
+"search_title" = "Поиск";
+"favorites_title" = "Избранное";
 "profile_title" = "Профиль";
+
+/* Profile */
 "my_profile" = "Личные данные";
 "personal_data" = "Личные данные";
 "change_password" = "Сменить пароль";
 "language" = "Язык";
 "terms_and_conditions" = "Условия и соглашения";
 "notifications" = "Уведомления";
-"dark_mode" = "Темный режим";
+"dark_mode" = "Тёмный режим";
 "edit" = "Редактировать";
 "logout" = "Выйти";
-"alert" = "Вы действительно хотите выйти?";
+"alert" = "Вы уверены, что хотите выйти из аккаунта?";
 "yes" = "Выйти";
-"no" = "Остаться";
+"no" = "Отмена";
+
+/* Errors */
+"CONECTION_ERROR" = "Ошибка подключения. Попробуйте снова.";
