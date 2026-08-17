@@ -65,6 +65,6 @@ A modern iOS streaming app client built 100% programmatically with UIKit and Sna
 * [x] Custom sheet modal presentation & blur effect integration
 * [x] Dynamic multi-language localization & `UserDefaults` persistence
 * [x] Logout alert and root controller transition handling
-* [ ] Connect authentication & profile user data to backend API / Firebase
+* [x] Connect authentication & profile user data to backend API / Firebase
 * [ ] Implement full Dark Mode theme switching logic
 * [ ] Refactor Profile controller to MVVM architecture
