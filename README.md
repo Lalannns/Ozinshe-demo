@@ -15,7 +15,9 @@ A modern iOS streaming app client built 100% programmatically with UIKit and Sna
 <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-13 at 00 52 22" src="https://github.com/user-attachments/assets/baf8bcea-d08f-4cf9-a2bf-427f95967b54" />
 <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-13 at 00 52 24" src="https://github.com/user-attachments/assets/263973a6-be9b-4b9b-b494-f482f5b6e6d8" />
 <img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-13 at 00 52 27" src="https://github.com/user-attachments/assets/fb37e762-9976-452c-b0d8-54b789e07f83" />
-<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-13 at 00 52 29" src="https://github.com/user-attachments/assets/6baba4d1-c4c8-49e3-94a1-7048ff7c2e4e" />
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 17 Pro - 2026-08-17 at 23 19 39" src="https://github.com/user-attachments/assets/3dc31e26-4619-4f7d-bbc7-daf71f91d0c5" />
+
+
 
 ---
 
