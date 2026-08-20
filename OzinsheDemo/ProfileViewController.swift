@@ -381,8 +381,10 @@ class ProfileViewController: UIViewController {
     }
 
     @objc private func passwordChangeButtonTapped() {
-        // Navigate to Change Password screen
+        let pswdChangeVC = PasswordChangeViewController()
+        navigationController?.pushViewController(pswdChangeVC, animated: true)
     }
+    
 
     @objc private func rulesPageButtonTapped() {
         // Navigate to Terms & Conditions screen
