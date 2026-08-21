@@ -9,6 +9,13 @@ import UIKit
 
 class SearchViewController: UIViewController {
 
+    private lazy var searchTextField: UITextField = {
+     
+        var textField = UITextField()
+        
+        return textField
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
