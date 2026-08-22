@@ -1,6 +1,6 @@
 # Ozinshe App
 
-A modern iOS streaming app client built 100% programmatically with UIKit and SnapKit, focused on delivering a clean user interface, localized experience, and smooth modal interactions.
+A modern iOS movie streaming app client built 100% programmatically with UIKit and SnapKit, focused on delivering a clean user interface, localized experience, and smooth modal interactions.
 
 ---
 
