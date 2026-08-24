@@ -38,16 +38,34 @@
 "already_have_account" = "Аккаунтыңыз бар ма?";
 "login_link" = "Кіру";
 
-/* Forgot Password */
+/* Forgot & Change Password */
 "forgot_password_title" = "Құпия сөзді қалпына келтіру";
 "forgot_password_instruction" = "Құпия сөзді қалпына келтіру сілтемесін алу үшін email-іңізді енгізіңіз";
 "send" = "Жіберу";
+"save_changes" = "Өзгерістерді сақтау";
+"password_changed_success" = "Құпия сөз сәтті өзгертілді";
+"passwords_do_not_match" = "Құпия сөздер сәйкес келмейді";
+"fill_all_fields" = "Барлық өрістерді толтырыңыз";
 
 /* Navigation Bar */
 "home_title" = "Басты";
-"search_title" = "Издеу";
+"search_title" = "Іздеу";
 "favorites_title" = "Тізім";
 "profile_title" = "Профиль";
+
+/* Search & Categories */
+"search" = "Іздеу";
+"categories_title" = "Санаттар";
+"category_tv_series" = "Телехикая";
+"category_sitcom" = "Ситком";
+"category_movie" = "Көркем фильм";
+"category_cartoon" = "Мультфильм";
+"category_animated_series" = "Мультсериал";
+"category_anime" = "Аниме";
+"category_tv_shows" = "Тв-бағдарлама және реалити-шоу";
+"category_documentary" = "Деректі фильм";
+"category_music" = "Музыка";
+"category_foreign_movies" = "Шетел фильмдері";
 
 /* Profile */
 "my_profile" = "Жеке деректер";

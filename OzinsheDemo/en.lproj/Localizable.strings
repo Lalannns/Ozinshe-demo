@@ -38,16 +38,34 @@
 "already_have_account" = "Already have an account?";
 "login_link" = "Sign In";
 
-/* Forgot Password */
+/* Forgot & Change Password */
 "forgot_password_title" = "Reset Password";
 "forgot_password_instruction" = "Enter your email to receive a password reset link";
 "send" = "Send";
+"save_changes" = "Save Changes";
+"password_changed_success" = "Password changed successfully";
+"passwords_do_not_match" = "Passwords do not match";
+"fill_all_fields" = "Fill in all fields";
 
 /* Navigation Bar */
 "home_title" = "Main";
 "search_title" = "Search";
 "favorites_title" = "Favorites";
 "profile_title" = "Profile";
+
+/* Search & Categories */
+"search" = "Search";
+"categories_title" = "Categories";
+"category_tv_series" = "TV Series";
+"category_sitcom" = "Sitcom";
+"category_movie" = "Feature Film";
+"category_cartoon" = "Animated Movie";
+"category_animated_series" = "Animated Series";
+"category_anime" = "Anime";
+"category_tv_shows" = "TV Shows & Reality Shows";
+"category_documentary" = "Documentary Film";
+"category_music" = "Music";
+"category_foreign_movies" = "Foreign Movies";
 
 /* Profile */
 "my_profile" = "Personal Data";

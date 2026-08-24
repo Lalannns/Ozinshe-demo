@@ -38,16 +38,34 @@
 "already_have_account" = "Уже есть аккаунт?";
 "login_link" = "Войти";
 
-/* Forgot Password */
+/* Forgot & Change Password */
 "forgot_password_title" = "Сброс пароля";
 "forgot_password_instruction" = "Введите ваш email для получения ссылки на сброс пароля";
 "send" = "Отправить";
+"save_changes" = "Сохранить изменения";
+"password_changed_success" = "Пароль успешно изменён";
+"passwords_do_not_match" = "Пароли не совпадают";
+"fill_all_fields" = "Заполните все поля";
 
 /* Navigation Bar */
 "home_title" = "Главное";
 "search_title" = "Поиск";
 "favorites_title" = "Избранное";
 "profile_title" = "Профиль";
+
+/* Search & Categories */
+"search" = "Поиск";
+"categories_title" = "Категории";
+"category_tv_series" = "Сериал";
+"category_sitcom" = "Ситком";
+"category_movie" = "Художественный фильм";
+"category_cartoon" = "Мультфильм";
+"category_animated_series" = "Мультсериал";
+"category_anime" = "Аниме";
+"category_tv_shows" = "ТВ-программы и реалити-шоу";
+"category_documentary" = "Документальный фильм";
+"category_music" = "Музыка";
+"category_foreign_movies" = "Зарубежные фильмы";
 
 /* Profile */
 "my_profile" = "Личные данные";
