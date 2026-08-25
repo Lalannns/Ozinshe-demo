@@ -11,23 +11,7 @@ import AdvancedPageControl
 class OnboardingViewController: UIViewController {
 
     // MARK: - Data
-    private let slides: [OnboardingSlide] = [
-        OnboardingSlide(
-            imageName: "firstSlide",
-            title: NSLocalizedString("onboarding_title_1".localized(), comment: ""),
-            subtitle: NSLocalizedString("onboarding_subtitle_1".localized(), comment: "")
-        ),
-        OnboardingSlide(
-            imageName: "secondSlide",
-            title: NSLocalizedString("onboarding_title_2".localized(), comment: ""),
-            subtitle: NSLocalizedString("onboarding_subtitle_2".localized(), comment: "")
-        ),
-        OnboardingSlide(
-            imageName: "thirdSlide",
-            title: NSLocalizedString("onboarding_title_3".localized(), comment: ""),
-            subtitle: NSLocalizedString("onboarding_subtitle_3".localized(), comment: "")
-        )
-    ]
+    private var slides: [OnboardingSlide] = []
     
     // MARK: - UI Elements
     private lazy var collectionView: UICollectionView = {
@@ -48,7 +32,7 @@ class OnboardingViewController: UIViewController {
     
     private let skipButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(NSLocalizedString("skip", comment: ""), for: .normal)
+        button.setTitle("skip".localized(), for: .normal)
         // Dark text color for the white background pill
         button.setTitleColor(UIColor(named: "111827") ?? .darkGray, for: .normal)
         button.titleLabel?.font = UIFont(name: "SFProDisplay-Medium", size: 12) ?? .systemFont(ofSize: 12, weight: .medium)
@@ -79,7 +63,7 @@ class OnboardingViewController: UIViewController {
     
     private let nextButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle(NSLocalizedString("next", comment: ""), for: .normal)
+        button.setTitle("next".localized(), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 16)
         button.backgroundColor = UIColor(named: "7C3AED") ?? UIColor(red: 124/255, green: 58/255, blue: 237/255, alpha: 1.0)
@@ -92,8 +76,31 @@ class OnboardingViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .appBackground
+        
+        setupSlides()
         setupUI()
         setupActions()
+    }
+    
+    private func setupSlides() {
+        slides = [
+            OnboardingSlide(
+                imageName: "firstSlide",
+                title: "onboarding_title_1".localized(),
+                subtitle: "onboarding_subtitle_1".localized()
+            ),
+            OnboardingSlide(
+                imageName: "secondSlide",
+                title: "onboarding_title_2".localized(),
+                subtitle: "onboarding_subtitle_2".localized()
+            ),
+            OnboardingSlide(
+                imageName: "thirdSlide",
+                title: "onboarding_title_3".localized(),
+                subtitle: "onboarding_subtitle_3".localized()
+            )
+        ]
     }
     
     private func setupUI() {
@@ -161,7 +168,6 @@ class OnboardingViewController: UIViewController {
             animated: true
         )
     }
-    
     
     @objc private func didTapNext() {
         finishOnboarding()

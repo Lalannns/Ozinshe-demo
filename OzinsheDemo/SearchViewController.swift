@@ -83,10 +83,13 @@ class SearchViewController: UIViewController {
         cv.delegate = self
         return cv
     }()
+    
+    
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .appBackground
         setupUI()
     }
 
@@ -171,6 +174,8 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         collectionView.reloadItems(at: [indexPath])
         delegate?.didSelectCategoryTag(key, isSelected: selectedCategoryKeys.contains(key))
     }
+    
+    
 }
 
 // MARK: - Custom Category Chip Cell

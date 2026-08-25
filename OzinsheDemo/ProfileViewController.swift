@@ -28,7 +28,7 @@ class ProfileViewController: UIViewController {
     private lazy var userNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "SFProDisplay-Bold", size: 24) ?? .boldSystemFont(ofSize: 24)
-        label.textColor = UIColor(named: "1C2431") ?? .black
+        label.textColor = UIColor(named: "111827") ?? .label
         label.textAlignment = .center
         return label
     }()
@@ -66,9 +66,10 @@ class ProfileViewController: UIViewController {
 
     private lazy var modeLabel: UILabel = createMenuLabel()
     private lazy var modeSwitch: ImageSwitch = {
-        let toggle = ImageSwitch(isOn: false)
+        let isDarkModeSaved = UserDefaults.standard.bool(forKey: "isDarkMode")
+        let toggle = ImageSwitch(isOn: isDarkModeSaved)
         toggle.onStateChanged = { [weak self] isOn in
-            // Handle dark mode toggle change
+            self?.handleDarkModeToggle(isOn: isOn)
         }
         return toggle
     }()
@@ -76,7 +77,7 @@ class ProfileViewController: UIViewController {
     // Background extending to screen bottom
     private lazy var grayBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(named: "F9FAFB") ?? .systemGroupedBackground
+        view.backgroundColor = UIColor(named: "Background") ?? .systemBackground
         return view
     }()
     
@@ -100,7 +101,7 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(named: "Background") ?? .systemBackground
 
         setupNavigationBar()
         setupUI()
@@ -118,14 +119,13 @@ class ProfileViewController: UIViewController {
         navigationItem.title = "profile_title".localized()
         
         let appearance = UINavigationBarAppearance()
-        
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        appearance.shadowColor = UIColor.systemGray5
+        appearance.backgroundColor = UIColor(named: "Background") ?? .systemBackground
+        appearance.shadowColor = .clear
         
         appearance.titleTextAttributes = [
             .font: UIFont(name: "SFProDisplay-Bold", size: 16) ?? .systemFont(ofSize: 16, weight: .bold),
-            .foregroundColor: UIColor.black
+            .foregroundColor: UIColor(named: "111827") ?? .label
         ]
         
         navigationController?.navigationBar.standardAppearance = appearance
@@ -231,7 +231,7 @@ class ProfileViewController: UIViewController {
             make.leading.trailing.bottom.equalToSuperview()
         }
 
-        // Inner Row Constraints (positioned clear of the chevron)
+        // Inner Row Constraints
         userInfoDetailLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(48)
@@ -261,7 +261,22 @@ class ProfileViewController: UIViewController {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(16)
         }
+    }
+    
+    // MARK: - Dark Mode Handler
+    
+    private func handleDarkModeToggle(isOn: Bool) {
+        UserDefaults.standard.set(isOn, forKey: "isDarkMode")
         
+        let style: UIUserInterfaceStyle = isOn ? .dark : .light
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            windowScene.windows.forEach { window in
+                window.overrideUserInterfaceStyle = style
+            }
+        }
+        
+        setupNavigationBar()
     }
     
     // MARK: - Update Localized Strings
@@ -287,10 +302,10 @@ class ProfileViewController: UIViewController {
     
     private func createMenuButton() -> UIButton {
         let button = UIButton(type: .system)
-        button.setTitleColor(UIColor(named: "1C2431") ?? .black, for: .normal)
+        button.setTitleColor(UIColor(named: "111827") ?? .label, for: .normal)
         button.titleLabel?.font = UIFont(name: "SFProDisplay-Medium", size: 16) ?? .systemFont(ofSize: 16, weight: .medium)
         button.contentHorizontalAlignment = .left
-        button.backgroundColor = (UIColor(named: "F9FAFB") ?? .gray)
+        button.backgroundColor = UIColor(named: "Background") ?? .systemBackground
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         
         let line = UIView()
@@ -307,7 +322,7 @@ class ProfileViewController: UIViewController {
     
     private func createRowContainer() -> UIView {
         let container = UIView()
-        container.backgroundColor = (UIColor(named: "F9FAFB") ?? .gray)
+        container.backgroundColor = UIColor(named: "Background") ?? .systemBackground
         
         let line = UIView()
         line.backgroundColor = UIColor.systemGray5
@@ -324,7 +339,7 @@ class ProfileViewController: UIViewController {
     private func createMenuLabel() -> UILabel {
         let label = UILabel()
         label.font = UIFont(name: "SFProDisplay-Medium", size: 16) ?? .systemFont(ofSize: 16, weight: .medium)
-        label.textColor = UIColor(named: "1C2431") ?? .black
+        label.textColor = UIColor(named: "111827") ?? .label
         return label
     }
     
@@ -384,7 +399,6 @@ class ProfileViewController: UIViewController {
         let pswdChangeVC = PasswordChangeViewController()
         navigationController?.pushViewController(pswdChangeVC, animated: true)
     }
-    
 
     @objc private func rulesPageButtonTapped() {
         // Navigate to Terms & Conditions screen
@@ -417,11 +431,7 @@ class ProfileViewController: UIViewController {
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-    
-    
-    
-    // change later to a full screen instead of alert pop-up
-    
+
     @objc private func didTapLogout() {
         let alert = UIAlertController(
             title: "logout".localized(),
@@ -440,8 +450,6 @@ class ProfileViewController: UIViewController {
         
         present(alert, animated: true)
     }
-    
-    
 
     private func performLogout() {
         // Clear token & stored user data
@@ -461,7 +469,6 @@ class ProfileViewController: UIViewController {
         }
     }
 }
-
 
 // MARK: - Language Delegate & Presentation Conformance
 
@@ -487,7 +494,6 @@ class ImageSwitch: UIButton {
     var isOn: Bool = false {
         didSet {
             updateImage()
-            onStateChanged?(isOn)
         }
     }
     
@@ -513,5 +519,6 @@ class ImageSwitch: UIButton {
     
     @objc private func toggleTapped() {
         isOn.toggle()
+        onStateChanged?(isOn)
     }
 }

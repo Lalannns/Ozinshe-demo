@@ -33,7 +33,7 @@ class FavoritesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .appBackground
         navigationItem.title = "favorites_title".localized()
         setupTableView()
     }
