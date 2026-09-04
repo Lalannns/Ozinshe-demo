@@ -5,21 +5,27 @@
 //  Created by Allan Auezkhan on 16.08.2026.
 //
 
-import Foundation
-import SwiftyJSON
-
-struct Movie {
+nonisolated struct Movie: Codable, Sendable {
     let id: Int
-    let name: String
-    let year: Int
-    let posterUrl: String
-    let categories: [String]
+    let movieNumber: Int?
+    let title: String?
+    let keyWords: String?
+    let description: String?
+    let year: Int?
+    let trend: Bool?
+    let poster: Poster?
+    let categories: [Category]?
     
-    init(json: JSON) {
-        self.id = json["id"].intValue
-        self.name = json["name"].stringValue
-        self.year = json["year"].intValue
-        self.posterUrl = json["poster"]["link"].stringValue
-        self.categories = json["categories"].arrayValue.map { $0["name"].stringValue }
+    nonisolated struct Poster: Codable, Sendable {
+        let id: Int
+        let link: String
+    }
+    
+    nonisolated struct Category: Codable, Sendable {
+        let id: Int
+        let name: String
+        let link: String?
+        let fileId: Int?
+        let movieCount: Int?
     }
 }

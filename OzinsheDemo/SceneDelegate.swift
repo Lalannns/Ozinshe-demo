@@ -1,4 +1,5 @@
 //
+//
 //  SceneDelegate.swift
 //  OzinsheDemo
 //
@@ -16,9 +17,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        // Set OnboardingViewController as the initial root view controller
-        let onboardingVC = OnboardingViewController()
-        window?.rootViewController = onboardingVC
+        // Restore stored token into Singleton memory
+        if let savedToken = UserDefaults.standard.string(forKey: "accessToken"), !savedToken.isEmpty {
+            Storage.sharedInstance.accessToken = savedToken
+            
+            // User is already logged in -> Skip Onboarding
+            let mainTabBar = TabBarViewController()
+            window?.rootViewController = mainTabBar
+        } else {
+            // User is not logged in -> Show Onboarding
+            let onboardingVC = OnboardingViewController()
+            window?.rootViewController = onboardingVC
+        }
         
         window?.makeKeyAndVisible()
     }

@@ -56,6 +56,7 @@
 /* Search & Categories */
 "search" = "Search";
 "categories_title" = "Categories";
+"search_results" = "Search results";
 "category_tv_series" = "TV Series";
 "category_sitcom" = "Sitcom";
 "category_movie" = "Feature Film";
@@ -83,3 +84,16 @@
 
 /* Errors */
 "CONECTION_ERROR" = "Connection error. Please try again.";
+
+
+/* API Genre/Category Name Mappings */
+"Телехикая" = "TV Series";
+"Ситком" = "Sitcom";
+"Көркем фильм" = "Feature Film";
+"Мультфильм" = "Animated Movie";
+"Мультсериал" = "Animated Series";
+"Аниме" = "Anime";
+"Тв-бағдарлама және реалити-шоу" = "TV Shows & Reality Shows";
+"Деректі фильм" = "Documentary Film";
+"Музыка" = "Music";
+"Шетел фильмдері" = "Foreign Movies";

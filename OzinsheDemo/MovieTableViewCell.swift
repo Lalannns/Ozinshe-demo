@@ -140,16 +140,34 @@ class MovieTableViewCell: UITableViewCell {
     }
     
     func configure(with movie: Movie) {
-        titleLabel.text = movie.name
-        subtitleLabel.text = "\(movie.year) • \(movie.categories.joined(separator: ", "))"
+        // 1. Fix: Use title instead of name
+        titleLabel.text = movie.title ?? ""
         
-        if let url = URL(string: movie.posterUrl) {
-            posterImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "MoviePlaceholder"))
+        // 2. Fix: Safely unwrap optional categories array and map category names
+        let categoryNames = movie.categories?.compactMap { $0.name } ?? []
+        let yearText = movie.year != nil ? "\(movie.year!)" : ""
+        
+        if !categoryNames.isEmpty {
+            subtitleLabel.text = "\(yearText) • \(categoryNames.joined(separator: " • "))"
+        } else {
+            subtitleLabel.text = yearText
+        }
+        
+        // 3. Fix: Use poster?.link instead of posterUrl
+        if let posterPath = movie.poster?.link, let url = URL(string: posterPath) {
+            posterImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "posterPlaceholder"))
+        } else {
+            posterImageView.image = UIImage(named: "posterPlaceholder")
         }
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+}
+
+extension MovieTableViewCell {
+    static let identifier = "MovieTableViewCell"
 }

@@ -67,20 +67,21 @@ class FavoritesViewController: UIViewController {
         
         SVProgressHUD.show()
         
-        AF.request(URLs.FAVORITES_URL, method: .get, headers: headers).responseData { [weak self] response in
-            SVProgressHUD.dismiss()
-            guard let self = self else { return }
-            
-            if response.response?.statusCode == 200, let data = response.data {
-                let json = JSON(data)
-                let movieArray = json.arrayValue
+        AF.request(URLs.FAVORITES_URL, method: .get, headers: headers)
+            .validate()
+            .responseDecodable(of: [Movie].self) { [weak self] response in
+                SVProgressHUD.dismiss()
+                guard let self = self else { return }
                 
-                self.favoriteMovies = movieArray.map { Movie(json: $0) }
-                self.tableView.reloadData()
-            } else {
-                SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
+                switch response.result {
+                case .success(let movies):
+                    self.favoriteMovies = movies
+                    self.tableView.reloadData()
+                case .failure(let error):
+                    print("Error fetching favorites: \(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
+                }
             }
-        }
     }
 }
 
