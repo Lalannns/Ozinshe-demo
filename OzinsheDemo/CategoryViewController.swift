@@ -19,6 +19,7 @@ class CategoryViewController: UIViewController {
 
     private var movies: [Movie] = []
 
+    
     // MARK: - UI Components
     private lazy var tableView: UITableView = {
         let tableView = UITableView()

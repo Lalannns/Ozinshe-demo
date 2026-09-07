@@ -40,6 +40,7 @@ class FavoritesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationItem.title = "favorites_title".localized()
         fetchFavorites()
     }
     
@@ -52,6 +53,7 @@ class FavoritesViewController: UIViewController {
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    
     
     // MARK: - API Data Fetching
     

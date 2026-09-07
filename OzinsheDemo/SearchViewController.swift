@@ -33,7 +33,7 @@ class SearchViewController: UIViewController {
             attributes: [.foregroundColor: UIColor.systemGray]
         )
         
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 48))
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 56))
         textField.leftView = paddingView
         textField.leftViewMode = .always
         
@@ -41,7 +41,7 @@ class SearchViewController: UIViewController {
         let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .regular)
         clearButton.setImage(UIImage(systemName: "xmark.circle.fill", withConfiguration: config), for: .normal)
         clearButton.tintColor = .systemGray
-        clearButton.frame = CGRect(x: 0, y: 0, width: 40, height: 48)
+        clearButton.frame = CGRect(x: 0, y: 0, width: 44, height: 56)
         clearButton.addTarget(self, action: #selector(clearSearchText), for: .touchUpInside)
         
         textField.rightView = clearButton
@@ -67,7 +67,7 @@ class SearchViewController: UIViewController {
         return button
     }()
 
-    private let categoriesHeaderLabel: UILabel = {
+    private let sectionHeaderLabel: UILabel = {
         let label = UILabel()
         label.text = "categories_title".localized()
         label.font = UIFont(name: "SFProDisplay-Bold", size: 24) ?? .boldSystemFont(ofSize: 24)
@@ -112,14 +112,15 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .appBackground
+        navigationItem.title = "search".localized()
         
         setupUI()
         setupActions()
         
-        // Explicitly set initial view state
+        // Initial State Layout
         collectionView.isHidden = false
-        categoriesHeaderLabel.isHidden = false
         tableView.isHidden = true
+        sectionHeaderLabel.text = "categories_title".localized()
         
         fetchCategories()
     }
@@ -128,7 +129,7 @@ class SearchViewController: UIViewController {
     private func setupUI() {
         view.addSubview(searchTextField)
         view.addSubview(searchButton)
-        view.addSubview(categoriesHeaderLabel)
+        view.addSubview(sectionHeaderLabel)
         view.addSubview(collectionView)
         view.addSubview(tableView)
         view.addSubview(activityIndicator)
@@ -146,19 +147,19 @@ class SearchViewController: UIViewController {
             make.height.equalTo(56)
         }
 
-        categoriesHeaderLabel.snp.makeConstraints { make in
+        sectionHeaderLabel.snp.makeConstraints { make in
             make.top.equalTo(searchTextField.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(categoriesHeaderLabel.snp.bottom).offset(16)
+            make.top.equalTo(sectionHeaderLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(searchTextField.snp.bottom).offset(16)
+            make.top.equalTo(sectionHeaderLabel.snp.bottom).offset(16)
             make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
@@ -172,24 +173,27 @@ class SearchViewController: UIViewController {
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
 
-    // MARK: - Actions & Search Debounce
+    // MARK: - Actions & State Switching
     @objc private func textFieldDidChange(_ textField: UITextField) {
         searchTimer?.invalidate()
         
         let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let isSearching = !text.isEmpty
         
-        collectionView.isHidden = isSearching
-        categoriesHeaderLabel.isHidden = isSearching
-        tableView.isHidden = !isSearching
-
-        guard isSearching else {
+        if isSearching {
+            sectionHeaderLabel.text = "search_results".localized()
+            collectionView.isHidden = true
+            tableView.isHidden = false
+        } else {
+            sectionHeaderLabel.text = "categories_title".localized()
+            collectionView.isHidden = false
+            tableView.isHidden = true
             movies.removeAll()
             tableView.reloadData()
             return
         }
 
-        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false) { [weak self] _ in
             self?.fetchSearchResults(query: text)
         }
     }
@@ -206,10 +210,27 @@ class SearchViewController: UIViewController {
             fetchSearchResults(query: query)
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateLocalizedTexts()
+    }
+
+    private func updateLocalizedTexts() {
+        navigationItem.title = "search".localized()
+        searchTextField.attributedPlaceholder = NSAttributedString(
+            string: "search".localized(),
+            attributes: [.foregroundColor: UIColor.systemGray]
+        )
+        
+        let isSearching = !(searchTextField.text?.isEmpty ?? true)
+        sectionHeaderLabel.text = isSearching ? "search_results".localized() : "categories_title".localized()
+        
+        collectionView.reloadData()
+    }
 
     // MARK: - API Calls
     private func fetchCategories() {
-        // 1. Fetch token matching the key saved in SignInViewController / Storage
         let token = UserDefaults.standard.string(forKey: "accessToken") ?? Storage.sharedInstance.accessToken
         
         guard !token.isEmpty else {
@@ -231,8 +252,6 @@ class SearchViewController: UIViewController {
                         do {
                             let decoder = JSONDecoder()
                             let fetchedCategories = try decoder.decode([Movie.Category].self, from: data)
-                            print("✅ Fetched \(fetchedCategories.count) categories")
-                            
                             self.categories = fetchedCategories
                             DispatchQueue.main.async {
                                 self.collectionView.reloadData()
@@ -252,31 +271,57 @@ class SearchViewController: UIViewController {
     private func fetchSearchResults(query: String) {
         activityIndicator.startAnimating()
         
+        let token = UserDefaults.standard.string(forKey: "accessToken") ?? Storage.sharedInstance.accessToken
         let parameters: [String: Any] = ["search": query]
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "userToken") ?? "")"
+            "Authorization": "Bearer \(token)"
         ]
 
         AF.request(URLs.SEARCH_MOVIES_URL, method: .get, parameters: parameters, headers: headers)
             .validate()
-            .responseDecodable(of: [Movie].self) { [weak self] response in
+            .responseData { [weak self] response in
                 guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
 
                 switch response.result {
-                case .success(let fetchedMovies):
-                    self.movies = fetchedMovies
+                case .success(let data):
+                    let decoder = JSONDecoder()
+                    
+                    // 1. Try decoding as direct array [Movie]
+                    if let directMovies = try? decoder.decode([Movie].self, from: data) {
+                        self.movies = directMovies
+                        self.tableView.reloadData()
+                        return
+                    }
+                    
+                    // 2. Try decoding as SearchResponse wrapper
+                    if let wrappedResponse = try? decoder.decode(SearchResponse.self, from: data),
+                       let contentMovies = wrappedResponse.content {
+                        self.movies = contentMovies
+                        self.tableView.reloadData()
+                        return
+                    }
+                    
+                    // 3. Print raw JSON if both fail to inspect structure in Xcode console
+                    if let rawJSON = String(data: data, encoding: .utf8) {
+                        print("⚠️ JSON Payload mismatch:\n\(rawJSON)")
+                    }
+                    
+                    self.movies.removeAll()
                     self.tableView.reloadData()
+
                 case .failure(let error):
-                    print("Error searching movies: \(error.localizedDescription)")
+                    print("❌ Request Error: \(error.localizedDescription)")
                     self.movies.removeAll()
                     self.tableView.reloadData()
                 }
             }
     }
+    
+    
 }
 
-// CollectionView DataSource & DelegateFlowLayout
+// MARK: - CollectionView DataSource & DelegateFlowLayout
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -311,6 +356,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         navigationController?.pushViewController(categoryVC, animated: true)
     }
 }
+
 // MARK: - TableView DataSource & Delegate
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
@@ -327,7 +373,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 152
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

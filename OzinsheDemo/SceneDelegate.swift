@@ -1,5 +1,4 @@
 //
-//
 //  SceneDelegate.swift
 //  OzinsheDemo
 //
@@ -7,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,6 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Restore stored token into Singleton memory
         if let savedToken = UserDefaults.standard.string(forKey: "accessToken"), !savedToken.isEmpty {
             Storage.sharedInstance.accessToken = savedToken
+            
+            // Set global Authorization header for SDWebImage poster downloads
+            let modifier = SDWebImageDownloaderRequestModifier { request in
+                var req = request
+                req.setValue("Bearer \(savedToken)", forHTTPHeaderField: "Authorization")
+                return req
+            }
+            SDWebImageDownloader.shared.requestModifier = modifier
             
             // User is already logged in -> Skip Onboarding
             let mainTabBar = TabBarViewController()
