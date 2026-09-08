@@ -54,7 +54,6 @@ class FavoritesViewController: UIViewController {
         }
     }
     
-    
     // MARK: - API Data Fetching
     
     private func fetchFavorites() {
@@ -103,6 +102,17 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         let movie = favoriteMovies[indexPath.row]
         cell.configure(with: movie)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let selectedMovie = favoriteMovies[indexPath.row]
+        let detailVC = DetailViewController()
+        detailVC.movieID = selectedMovie.id
+        detailVC.hidesBottomBarWhenPushed = true
+        
+        navigationController?.pushViewController(detailVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

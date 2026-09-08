@@ -19,12 +19,19 @@ nonisolated struct Movie: Codable, Sendable {
     let description: String?
     let year: Int?
     let trend: Bool?
-    let favorite: Bool?
+    var favorite: Bool?        // Changed to 'var' so toggle() works
     let movieType: String?
     let poster: Poster?
     let categories: [Category]?
     let genres: [Category]?
     let categoryAges: [Category]?
+    
+    // Additional Detail Fields
+    let seasonCount: Int?
+    let director: String?
+    let producer: String?
+    let videoUrl: String?
+    let video: Video?
     
     // Derived property for title
     var displayTitle: String {
@@ -62,4 +69,17 @@ nonisolated struct Movie: Codable, Sendable {
         let fileId: Int?
         let movieCount: Int?
     }
+    
+    nonisolated struct Video: Codable, Sendable {
+        let id: Int?
+        let link: String?
+        let number: Int?
+    }
+}
+
+// Top-level scope so DetailViewController and ScreenshotCell find it without 'Movie.' prefix
+nonisolated struct Screenshot: Codable, Sendable {
+    let id: Int?
+    let link: String?
+    let fileId: Int?
 }

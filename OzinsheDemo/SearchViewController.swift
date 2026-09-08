@@ -385,4 +385,3 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
-
