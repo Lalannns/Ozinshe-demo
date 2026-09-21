@@ -5,6 +5,7 @@
 //  Created by Allan Auezkhan on 12.07.2026.
 //
 
+
 import UIKit
 import SnapKit
 import SDWebImage

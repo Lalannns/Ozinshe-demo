@@ -66,6 +66,8 @@ class FavoritesViewController: UIViewController {
             "Accept": "application/json"
         ]
         
+        print("REQUEST URL:", URLs.FAVORITES_URL)
+        
         SVProgressHUD.show()
         
         AF.request(URLs.FAVORITES_URL, method: .get, headers: headers)
@@ -74,21 +76,31 @@ class FavoritesViewController: UIViewController {
                 SVProgressHUD.dismiss()
                 guard let self = self else { return }
                 
+                if let httpResponse = response.response {
+                    print("📊 STATUS CODE:", httpResponse.statusCode)
+                    print("📋 ALLOWED METHODS:", httpResponse.allHeaderFields["Allow"] ?? httpResponse.allHeaderFields["allow"] ?? "N/A")
+                }
+                
                 switch response.result {
                 case .success(let movies):
+                    print("✅ Успешно получено фильмов:", movies.count)
                     self.favoriteMovies = movies
                     self.tableView.reloadData()
                 case .failure(let error):
-                    print("Error fetching favorites: \(error.localizedDescription)")
+                    print("❌ Error fetching favorites:", error.localizedDescription)
+                    if let data = response.data, let body = String(data: data, encoding: .utf8) {
+                        print("📄 RESPONSE BODY:", body)
+                    }
                     SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
                 }
             }
-    }
-}
+    }}
 
 // MARK: - UITableViewDataSource & UITableViewDelegate
 
-extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
+// 1. MARK: - UITableViewDataSource
+
+extension FavoritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return favoriteMovies.count
@@ -104,6 +116,58 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let movieToDelete = favoriteMovies[indexPath.row]
+            
+            let token = Storage.sharedInstance.accessToken.isEmpty
+                ? UserDefaults.standard.string(forKey: "accessToken") ?? ""
+                : Storage.sharedInstance.accessToken
+            
+            let headers: HTTPHeaders = [
+                "Authorization": "Bearer \(token)",
+                "Accept": "application/json"
+            ]
+            
+            let parameters: [String: Any] = [
+                "movieId": movieToDelete.id
+            ]
+            
+            SVProgressHUD.show()
+            
+            AF.request(
+                URLs.DELETE_FAVORITES_URL,
+                method: .delete,
+                parameters: parameters,
+                encoding: JSONEncoding.default,
+                headers: headers
+            )
+            .validate()
+            .response { [weak self] response in
+                SVProgressHUD.dismiss()
+                guard let self = self else { return }
+                
+                switch response.result {
+                case .success:
+                    self.favoriteMovies.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                case .failure(let error):
+                    print("Error deleting favorite: \(error.localizedDescription)")
+                    SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
+                }
+            }
+        }
+    }
+}
+
+// 2. MARK: - UITableViewDelegate
+
+extension FavoritesViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -113,9 +177,5 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         detailVC.hidesBottomBarWhenPushed = true
         
         navigationController?.pushViewController(detailVC, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
     }
 }

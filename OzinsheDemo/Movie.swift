@@ -28,10 +28,18 @@ nonisolated struct Movie: Codable, Sendable {
     
     // Additional Detail Fields
     let seasonCount: Int?
+    let seriesCount: Int?      // Added field to resolve DetailVC build error
     let director: String?
     let producer: String?
     let videoUrl: String?
     let video: Video?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, title, keyWords, description, year, trend, favorite
+        case movieType, poster, categories, genres, categoryAges
+        case seasonCount, director, producer, videoUrl, video
+        case seriesCount = "seriesCount"
+    }
     
     // Derived property for title
     var displayTitle: String {

@@ -23,55 +23,80 @@ class DetailViewController: UIViewController {
     
     private var isDescriptionExpanded = false
 
+    // MARK: - Dynamic Colors Palette
+    
+    private let appBackgroundColor = UIColor { trait in
+        return trait.userInterfaceStyle == .dark
+            ? UIColor(red: 11/255, green: 19/255, blue: 43/255, alpha: 1.0)
+            : .white
+    }
+    
+    private let cardBackgroundColor = UIColor { trait in
+        return trait.userInterfaceStyle == .dark
+            ? UIColor(red: 17/255, green: 24/255, blue: 39/255, alpha: 1.0)
+            : .white
+    }
+    
+    private let primaryTextColor = UIColor { trait in
+        return trait.userInterfaceStyle == .dark
+            ? .white
+            : UIColor(red: 17/255, green: 24/255, blue: 39/255, alpha: 1.0)
+    }
+    
+    private let mutedTextColor = UIColor(red: 156/255, green: 163/255, blue: 175/255, alpha: 1.0)
+    
+    private let borderDividerColor = UIColor { trait in
+        return trait.userInterfaceStyle == .dark
+            ? UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1.0)
+            : UIColor(red: 229/255, green: 231/255, blue: 235/255, alpha: 1.0)
+    }
+    
+    private let primaryPurple = UIColor(red: 120/255, green: 69/255, blue: 228/255, alpha: 1.0)
+
     // MARK: - UI Elements
     
-    private let scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.showsVerticalScrollIndicator = false
         sv.contentInsetAdjustmentBehavior = .never
+        sv.backgroundColor = appBackgroundColor
         return sv
     }()
     
     private let contentView = UIView()
-    
-    // Top Hero Backdrop & Container
     private let heroContainerView = UIView()
     
-    private let posterImageView: UIImageView = {
+    private lazy var posterImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
-        iv.backgroundColor = .systemGray5
+        iv.backgroundColor = appBackgroundColor
         return iv
     }()
     
     private let gradientOverlay: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+        v.backgroundColor = UIColor.black.withAlphaComponent(0.35)
         return v
     }()
     
     private lazy var backButton: UIButton = {
         let btn = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 14, weight: .semibold)
+        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold)
         btn.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
         btn.tintColor = .white
-        btn.backgroundColor = UIColor.black.withAlphaComponent(0.35)
-        btn.layer.cornerRadius = 18
         btn.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         return btn
     }()
     
     private lazy var favoriteButton: UIButton = {
         let btn = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         btn.setImage(UIImage(systemName: "bookmark", withConfiguration: config), for: .normal)
         btn.tintColor = .white
         btn.addTarget(self, action: #selector(favoriteTapped), for: .touchUpInside)
         return btn
     }()
-    
-    //rework favorites so that it unsaves and removes from list.
     
     private let favoriteLabel: UILabel = {
         let l = UILabel()
@@ -87,15 +112,19 @@ class DetailViewController: UIViewController {
         let config = UIImage.SymbolConfiguration(pointSize: 22, weight: .bold)
         btn.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
         btn.tintColor = .white
-        btn.backgroundColor = UIColor(red: 120/255, green: 69/255, blue: 228/255, alpha: 1.0)
+        btn.backgroundColor = primaryPurple
         btn.layer.cornerRadius = 28
+        btn.layer.shadowColor = primaryPurple.cgColor
+        btn.layer.shadowOffset = CGSize(width: 0, height: 6)
+        btn.layer.shadowRadius = 16
+        btn.layer.shadowOpacity = 0.6
         btn.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
         return btn
     }()
     
     private lazy var shareButton: UIButton = {
         let btn = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         btn.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
         btn.tintColor = .white
         btn.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
@@ -111,42 +140,41 @@ class DetailViewController: UIViewController {
         return l
     }()
 
-    // White Rounded Sheet Container
-    private let cardContainerView: UIView = {
+    private lazy var cardContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .appBackground
+        view.backgroundColor = cardBackgroundColor
         view.layer.cornerRadius = 32
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.clipsToBounds = true
         return view
     }()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let l = UILabel()
         l.font = .boldSystemFont(ofSize: 22)
-        l.textColor = .appTextColor
+        l.textColor = primaryTextColor
         l.numberOfLines = 0
         return l
     }()
     
-    private let subTitleLabel: UILabel = {
+    private lazy var subTitleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 12, weight: .regular)
-        l.textColor = .systemGray
+        l.textColor = mutedTextColor
         l.numberOfLines = 0
         return l
     }()
     
-    private let dividerLine1: UIView = {
+    private lazy var dividerLine1: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.systemGray5
+        v.backgroundColor = borderDividerColor
         return v
     }()
     
-    private let descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 13)
-        l.textColor = .secondaryLabel
+        l.font = .systemFont(ofSize: 13, weight: .regular)
+        l.textColor = mutedTextColor
         l.numberOfLines = 3
         return l
     }()
@@ -154,49 +182,48 @@ class DetailViewController: UIViewController {
     private lazy var readMoreButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Толығырақ", for: .normal)
-        btn.setTitleColor(UIColor(red: 120/255, green: 69/255, blue: 228/255, alpha: 1.0), for: .normal)
+        btn.setTitleColor(primaryPurple, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .bold)
         btn.addTarget(self, action: #selector(readMoreTapped), for: .touchUpInside)
         return btn
     }()
     
-    private let directorTitleLabel: UILabel = {
+    private lazy var directorTitleLabel: UILabel = {
         let l = UILabel()
         l.text = "Режиссер:"
         l.font = .systemFont(ofSize: 13)
-        l.textColor = .systemGray
+        l.textColor = mutedTextColor
         return l
     }()
     
-    private let directorValueLabel: UILabel = {
+    private lazy var directorValueLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 13, weight: .semibold)
-        l.textColor = .appTextColor
+        l.textColor = primaryTextColor
         return l
     }()
     
-    private let producerTitleLabel: UILabel = {
+    private lazy var producerTitleLabel: UILabel = {
         let l = UILabel()
         l.text = "Продюсер:"
         l.font = .systemFont(ofSize: 13)
-        l.textColor = .systemGray
+        l.textColor = mutedTextColor
         return l
     }()
     
-    private let producerValueLabel: UILabel = {
+    private lazy var producerValueLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 13, weight: .semibold)
-        l.textColor = .appTextColor
+        l.textColor = primaryTextColor
         return l
     }()
     
-    private let dividerLine2: UIView = {
+    private lazy var dividerLine2: UIView = {
         let v = UIView()
-        v.backgroundColor = UIColor.systemGray5
+        v.backgroundColor = borderDividerColor
         return v
     }()
     
-    // Episodes ("Бөлімдер") Row
     private lazy var episodesRowView: UIView = {
         let v = UIView()
         let tap = UITapGestureRecognizer(target: self, action: #selector(episodesTapped))
@@ -205,35 +232,34 @@ class DetailViewController: UIViewController {
         return v
     }()
     
-    private let episodesTitleLabel: UILabel = {
+    private lazy var episodesTitleLabel: UILabel = {
         let l = UILabel()
         l.text = "Бөлімдер"
         l.font = .boldSystemFont(ofSize: 16)
-        l.textColor = .appTextColor
+        l.textColor = primaryTextColor
         return l
     }()
     
-    private let episodesCountLabel: UILabel = {
+    private lazy var episodesCountLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 13)
-        l.textColor = .systemGray
+        l.textColor = mutedTextColor
         return l
     }()
     
-    private let episodesChevron: UIImageView = {
+    private lazy var episodesChevron: UIImageView = {
         let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .semibold)
         let iv = UIImageView(image: UIImage(systemName: "chevron.right", withConfiguration: config))
-        iv.tintColor = .systemGray
+        iv.tintColor = mutedTextColor
         iv.contentMode = .scaleAspectFit
         return iv
     }()
 
-    // Screenshots Section
-    private let screenshotsTitleLabel: UILabel = {
+    private lazy var screenshotsTitleLabel: UILabel = {
         let l = UILabel()
         l.text = "Скриншоттар"
         l.font = .boldSystemFont(ofSize: 16)
-        l.textColor = .appTextColor
+        l.textColor = primaryTextColor
         return l
     }()
     
@@ -251,19 +277,18 @@ class DetailViewController: UIViewController {
         return cv
     }()
     
-    // Similar Movies Section
-    private let similarTitleLabel: UILabel = {
+    private lazy var similarTitleLabel: UILabel = {
         let l = UILabel()
         l.text = "Ұқсас телехикаялар"
         l.font = .boldSystemFont(ofSize: 16)
-        l.textColor = .appTextColor
+        l.textColor = primaryTextColor
         return l
     }()
     
     private lazy var similarAllButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Барлығы", for: .normal)
-        btn.setTitleColor(UIColor(red: 120/255, green: 69/255, blue: 228/255, alpha: 1.0), for: .normal)
+        btn.setTitleColor(primaryPurple, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
         return btn
     }()
@@ -318,7 +343,6 @@ class DetailViewController: UIViewController {
         
         SVProgressHUD.show()
         
-        // 1. Fetch Movie Detail
         AF.request("\(URLs.MOVIE_DETAIL_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: Movie.self) { [weak self] response in
@@ -329,7 +353,6 @@ class DetailViewController: UIViewController {
                 }
             }
             
-        // 2. Fetch Screenshots
         AF.request("\(URLs.SCREENSHOTS_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: [Screenshot].self) { [weak self] response in
@@ -339,7 +362,6 @@ class DetailViewController: UIViewController {
                 }
             }
             
-        // 3. Fetch Similar Movies
         AF.request("\(URLs.SIMILAR_MOVIES_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: [Movie].self) { [weak self] response in
@@ -355,20 +377,23 @@ class DetailViewController: UIViewController {
         
         let yearText = "\(movie.year ?? 2020)"
         let subcatsText = movie.displaySubcategories.isEmpty ? "Телехикая" : movie.displaySubcategories
-        let typeText = movie.movieType == "SERIES" ? "\(movie.seasonCount ?? 10) серия, 7 мин." : "Фильм"
+        
+        let seasons = movie.seasonCount ?? 5
+        let series = movie.seriesCount ?? 46
+        let typeText = movie.movieType == "SERIES" ? "\(seasons) сезон, \(series) серия" : "Фильм"
         subTitleLabel.text = "\(yearText) • \(subcatsText) • \(typeText)"
         
         descriptionLabel.text = movie.description
         directorValueLabel.text = movie.director ?? "Бағдәулет Әлімбеков"
         producerValueLabel.text = movie.producer ?? "Сандуғаш Кенжебаева"
-        episodesCountLabel.text = "\(movie.seasonCount ?? 10) серия"
+        episodesCountLabel.text = "\(seasons) сезон, \(series) серия"
         
         if let link = movie.poster?.link, let url = URL(string: link) {
             posterImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "posterPlaceholder"))
         }
         
         let isFav = movie.favorite ?? false
-        let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
         favoriteButton.setImage(UIImage(systemName: isFav ? "bookmark.fill" : "bookmark", withConfiguration: config), for: .normal)
         favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
         
@@ -387,12 +412,11 @@ class DetailViewController: UIViewController {
     // MARK: - Layout Setup
     
     private func setupUI() {
-        view.backgroundColor = .appBackground
+        view.backgroundColor = appBackgroundColor
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        // Hero Section Subviews
         contentView.addSubview(heroContainerView)
         heroContainerView.addSubview(posterImageView)
         heroContainerView.addSubview(gradientOverlay)
@@ -403,7 +427,6 @@ class DetailViewController: UIViewController {
         heroContainerView.addSubview(shareButton)
         heroContainerView.addSubview(shareLabel)
         
-        // Card Sheet Subviews
         contentView.addSubview(cardContainerView)
         cardContainerView.addSubview(titleLabel)
         cardContainerView.addSubview(subTitleLabel)
@@ -427,7 +450,6 @@ class DetailViewController: UIViewController {
         cardContainerView.addSubview(similarAllButton)
         cardContainerView.addSubview(similarCV)
         
-        // Constraints
         scrollView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -439,7 +461,7 @@ class DetailViewController: UIViewController {
         
         heroContainerView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(320)
+            make.height.equalTo(340)
         }
         
         posterImageView.snp.makeConstraints { make in
@@ -453,7 +475,7 @@ class DetailViewController: UIViewController {
         backButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             make.leading.equalToSuperview().offset(16)
-            make.width.height.equalTo(36)
+            make.width.height.equalTo(32)
         }
         
         playButton.snp.makeConstraints { make in
@@ -483,7 +505,6 @@ class DetailViewController: UIViewController {
             make.centerX.equalTo(shareButton)
         }
         
-        // Card Sheet Overlap Constraint
         cardContainerView.snp.makeConstraints { make in
             make.top.equalTo(heroContainerView.snp.bottom).offset(-28)
             make.leading.trailing.bottom.equalToSuperview()
@@ -545,7 +566,6 @@ class DetailViewController: UIViewController {
             make.height.equalTo(1)
         }
         
-        // Episodes Row Constraints
         episodesRowView.snp.makeConstraints { make in
             make.top.equalTo(dividerLine2.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(24)
@@ -566,7 +586,6 @@ class DetailViewController: UIViewController {
             make.centerY.equalToSuperview()
         }
         
-        // Screenshots Section Constraints
         screenshotsTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(episodesRowView.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview().inset(24)
@@ -578,7 +597,6 @@ class DetailViewController: UIViewController {
             make.height.equalTo(112)
         }
         
-        // Similar Section Constraints
         similarTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(screenshotsCV.snp.bottom).offset(24)
             make.leading.equalToSuperview().offset(24)
@@ -615,34 +633,82 @@ class DetailViewController: UIViewController {
     
     @objc private func favoriteTapped() {
         guard let movie = movie else { return }
+        
         let token = Storage.sharedInstance.accessToken.isEmpty
             ? UserDefaults.standard.string(forKey: "accessToken") ?? ""
             : Storage.sharedInstance.accessToken
-            
+                
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(token)",
             "Accept": "application/json"
         ]
         
         let isCurrentlyFav = movie.favorite ?? false
-        let urlString = isCurrentlyFav ? URLs.DELETE_FAVORITES_URL : URLs.ADD_FAVORITES_URL
-        let method: HTTPMethod = isCurrentlyFav ? .delete : .post
-        let parameters: [String: Any] = ["movieId": movie.id]
         
         SVProgressHUD.show()
         
-        AF.request(urlString, method: method, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+        if isCurrentlyFav {
+            let parameters: [String: Any] = [
+                "movieId": movie.id
+            ]
+            
+            AF.request(
+                URLs.DELETE_FAVORITES_URL,
+                method: .delete,
+                parameters: parameters,
+                encoding: JSONEncoding.default,
+                headers: headers
+            )
             .validate()
             .response { [weak self] response in
                 SVProgressHUD.dismiss()
-                if response.error == nil {
-                    self?.movie?.favorite?.toggle()
-                    let isFav = self?.movie?.favorite ?? false
-                    let config = UIImage.SymbolConfiguration(pointSize: 18, weight: .medium)
-                    self?.favoriteButton.setImage(UIImage(systemName: isFav ? "bookmark.fill" : "bookmark", withConfiguration: config), for: .normal)
-                    self?.favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
+                
+                switch response.result {
+                case .success:
+                    self?.updateFavoriteState(isFav: false)
+                    
+                case .failure(let error):
+                    if let statusCode = response.response?.statusCode {
+                        print("DELETE status code: \(statusCode)")
+                    }
+                    print("DELETE favorite error: \(error.localizedDescription)")
                 }
             }
+        
+        } else {
+            // ADD FAVORITE
+            let parameters: [String: Any] = ["movieId": movie.id]
+            
+            AF.request(
+                URLs.ADD_FAVORITES_URL,
+                method: .post,
+                parameters: parameters,
+                encoding: JSONEncoding.default,
+                headers: headers
+            )
+            .validate()
+            .response { [weak self] response in
+                SVProgressHUD.dismiss()
+                
+                switch response.result {
+                case .success:
+                    self?.updateFavoriteState(isFav: true)
+                    
+                case .failure(let error):
+                    print("ADD favorite error: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    private func updateFavoriteState(isFav: Bool) {
+        movie?.favorite = isFav
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        favoriteButton.setImage(UIImage(systemName: isFav ? "bookmark.fill" : "bookmark", withConfiguration: config), for: .normal)
+        favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
+        
+        NotificationCenter.default.post(name: NSNotification.Name("FavoriteStateChanged"), object: nil)
     }
     
     @objc private func shareTapped() {
@@ -663,7 +729,7 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func episodesTapped() {
-        // Handled if SeasonsViewController is present
+        // Handle pushing SeasonsViewController / Episodes list
     }
 }
 
