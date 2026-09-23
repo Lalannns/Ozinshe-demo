@@ -30,8 +30,22 @@ class URLs {
     static let USER_PROFILE_URL = BASE_URL + "user/profile"
     static let CHANGE_PASSWORD_URL = BASE_URL + "user/profile/change-password"
     
-    
+    //MovieDetail
     static let MOVIE_DETAIL_URL = BASE_URL + "movies/"
-    static let SCREENSHOTS_URL = BASE_URL + "movies/screenshots/"
+    static let SCREENSHOTS_URL = BASE_URL + "screenshots/"
     static let SIMILAR_MOVIES_URL = BASE_URL + "movies/similar/"
+    
+}
+
+extension String {
+    var fixedURL: URL? {
+        let correctedString = self.replacingOccurrences(
+            of: "http://api.ozinshe.com",
+            with: "https://apiozinshe.mobydev.kz"
+        )
+        guard let encodedString = correctedString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return nil
+        }
+        return URL(string: encodedString)
+    }
 }

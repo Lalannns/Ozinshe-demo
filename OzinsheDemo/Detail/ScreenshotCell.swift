@@ -34,9 +34,8 @@ class ScreenshotCell: UICollectionViewCell {
     }
     
     func configure(with screenshot: Screenshot) {
-        if let link = screenshot.link, let url = URL(string: link) {
-            imageView.sd_setImage(with: url)
+        if let link = screenshot.link, let url = link.fixedURL {
+            imageView.sd_setImage(with: url) // Использование корректного имени переменной
         }
     }
-    
 }

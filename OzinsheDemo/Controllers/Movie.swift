@@ -22,6 +22,7 @@ nonisolated struct Movie: Codable, Sendable {
     var favorite: Bool?        // Changed to 'var' so toggle() works
     let movieType: String?
     let poster: Poster?
+    let cover: Poster?
     let categories: [Category]?
     let genres: [Category]?
     let categoryAges: [Category]?
@@ -36,7 +37,7 @@ nonisolated struct Movie: Codable, Sendable {
     
     enum CodingKeys: String, CodingKey {
         case id, name, title, keyWords, description, year, trend, favorite
-        case movieType, poster, categories, genres, categoryAges
+        case movieType, poster, cover, categories, genres, categoryAges
         case seasonCount, director, producer, videoUrl, video
         case seriesCount = "seriesCount"
     }
@@ -91,3 +92,4 @@ nonisolated struct Screenshot: Codable, Sendable {
     let link: String?
     let fileId: Int?
 }
+

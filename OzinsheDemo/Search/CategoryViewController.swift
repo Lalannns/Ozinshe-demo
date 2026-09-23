@@ -27,6 +27,7 @@ class CategoryViewController: UIViewController {
     // MARK: - Properties
     var categoryID: Int?
     var categoryName: String?
+    var categoryTitle: String?
     
     private var movies: [Movie] = []
 

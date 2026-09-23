@@ -67,7 +67,7 @@ class SimilarMovieCell: UICollectionViewCell {
         titleLabel.text = movie.displayTitle
         subTitleLabel.text = movie.displaySubcategories.isEmpty ? "Телехикая" : movie.displaySubcategories
         
-        if let link = movie.poster?.link, let url = URL(string: link) {
+        if let link = movie.poster?.link ?? movie.cover?.link, let url = link.fixedURL {
             posterImageView.sd_setImage(with: url)
         }
     }

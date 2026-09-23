@@ -17,7 +17,7 @@ class DetailViewController: UIViewController {
     // MARK: - Properties
     
     var movieID: Int?
-    private var movie: Movie?
+    var movie: Movie?
     private var screenshots: [Screenshot] = []
     private var similarMovies: [Movie] = []
     
@@ -274,6 +274,7 @@ class DetailViewController: UIViewController {
         cv.contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         cv.register(ScreenshotCell.self, forCellWithReuseIdentifier: ScreenshotCell.identifier)
         cv.dataSource = self
+        cv.delegate = self
         return cv
     }()
     
@@ -290,6 +291,7 @@ class DetailViewController: UIViewController {
         btn.setTitle("Барлығы", for: .normal)
         btn.setTitleColor(primaryPurple, for: .normal)
         btn.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
+        btn.addTarget(self, action: #selector(similarAllTapped), for: .touchUpInside)
         return btn
     }()
     
@@ -343,6 +345,7 @@ class DetailViewController: UIViewController {
         
         SVProgressHUD.show()
         
+        // 1. Детали фильма
         AF.request("\(URLs.MOVIE_DETAIL_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: Movie.self) { [weak self] response in
@@ -353,6 +356,7 @@ class DetailViewController: UIViewController {
                 }
             }
             
+        // 2. Скриншоты
         AF.request("\(URLs.SCREENSHOTS_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: [Screenshot].self) { [weak self] response in
@@ -362,14 +366,32 @@ class DetailViewController: UIViewController {
                 }
             }
             
+        // 3. Похожие фильмы с отладкой
         AF.request("\(URLs.SIMILAR_MOVIES_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: [Movie].self) { [weak self] response in
-                if case .success(let similar) = response.result {
-                    self?.similarMovies = similar
-                    self?.similarCV.reloadData()
+                guard let self = self else { return }
+                
+                switch response.result {
+                case .success(let similar):
+                    print("✅ Загружено похожих фильмов: \(similar.count)")
+                    self.similarMovies = similar
+                    
+                    DispatchQueue.main.async {
+                        self.similarCV.reloadData()
+                    }
+                    
+                case .failure(let error):
+                    print("❌ Ошибка загрузки похожих фильмов (Status \(response.response?.statusCode ?? 0)):")
+                    print(error)
+                    
+                    // Если произошла ошибка декодирования JSON:
+                    if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
+                        print("📦 Сырой ответ API:\n\(jsonString)")
+                    }
                 }
             }
+        
     }
     
     private func updateUI(with movie: Movie) {
@@ -378,9 +400,11 @@ class DetailViewController: UIViewController {
         let yearText = "\(movie.year ?? 2020)"
         let subcatsText = movie.displaySubcategories.isEmpty ? "Телехикая" : movie.displaySubcategories
         
-        let seasons = movie.seasonCount ?? 5
-        let series = movie.seriesCount ?? 46
-        let typeText = movie.movieType == "SERIES" ? "\(seasons) сезон, \(series) серия" : "Фильм"
+        let seasons = movie.seasonCount ?? 0
+        let series = movie.seriesCount ?? 0
+        let isSeries = movie.movieType == "SERIES"
+        
+        let typeText = isSeries ? "\(seasons) сезон, \(series) серия" : "Фильм"
         subTitleLabel.text = "\(yearText) • \(subcatsText) • \(typeText)"
         
         descriptionLabel.text = movie.description
@@ -388,7 +412,7 @@ class DetailViewController: UIViewController {
         producerValueLabel.text = movie.producer ?? "Сандуғаш Кенжебаева"
         episodesCountLabel.text = "\(seasons) сезон, \(series) серия"
         
-        if let link = movie.poster?.link, let url = URL(string: link) {
+        if let link = movie.poster?.link ?? movie.cover?.link, let url = link.fixedURL {
             posterImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "posterPlaceholder"))
         }
         
@@ -397,15 +421,17 @@ class DetailViewController: UIViewController {
         favoriteButton.setImage(UIImage(systemName: isFav ? "bookmark.fill" : "bookmark", withConfiguration: config), for: .normal)
         favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
         
-        let isSeries = movie.movieType == "SERIES"
+        // Управление видимостью блока эпизодов и констреинтами
         episodesRowView.isHidden = !isSeries
         dividerLine2.isHidden = !isSeries
         
-        if !isSeries {
-            screenshotsTitleLabel.snp.remakeConstraints { make in
+        screenshotsTitleLabel.snp.remakeConstraints { make in
+            if isSeries {
+                make.top.equalTo(episodesRowView.snp.bottom).offset(24)
+            } else {
                 make.top.equalTo(producerTitleLabel.snp.bottom).offset(24)
-                make.leading.trailing.equalToSuperview().inset(24)
             }
+            make.leading.trailing.equalToSuperview().inset(24)
         }
     }
     
@@ -648,9 +674,7 @@ class DetailViewController: UIViewController {
         SVProgressHUD.show()
         
         if isCurrentlyFav {
-            let parameters: [String: Any] = [
-                "movieId": movie.id
-            ]
+            let parameters: [String: Any] = ["movieId": movie.id]
             
             AF.request(
                 URLs.DELETE_FAVORITES_URL,
@@ -662,21 +686,11 @@ class DetailViewController: UIViewController {
             .validate()
             .response { [weak self] response in
                 SVProgressHUD.dismiss()
-                
-                switch response.result {
-                case .success:
+                if case .success = response.result {
                     self?.updateFavoriteState(isFav: false)
-                    
-                case .failure(let error):
-                    if let statusCode = response.response?.statusCode {
-                        print("DELETE status code: \(statusCode)")
-                    }
-                    print("DELETE favorite error: \(error.localizedDescription)")
                 }
             }
-        
         } else {
-            // ADD FAVORITE
             let parameters: [String: Any] = ["movieId": movie.id]
             
             AF.request(
@@ -689,13 +703,8 @@ class DetailViewController: UIViewController {
             .validate()
             .response { [weak self] response in
                 SVProgressHUD.dismiss()
-                
-                switch response.result {
-                case .success:
+                if case .success = response.result {
                     self?.updateFavoriteState(isFav: true)
-                    
-                case .failure(let error):
-                    print("ADD favorite error: \(error.localizedDescription)")
                 }
             }
         }
@@ -729,7 +738,11 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func episodesTapped() {
-        // Handle pushing SeasonsViewController / Episodes list
+        // Переход к экрану серий / сезонов
+    }
+    
+    @objc private func similarAllTapped() {
+        // Переход к экрану полного списка похожих фильмов
     }
 }
 
