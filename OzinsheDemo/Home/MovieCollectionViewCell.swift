@@ -12,45 +12,42 @@ import SDWebImage
 class MovieCollectionViewCell: UICollectionViewCell {
     static let identifier = "MovieCollectionViewCell"
 
-    // MARK: - UI Elements
     private let posterImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.layer.cornerRadius = 8
-        iv.backgroundColor = .systemGray5
-        return iv
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 12
+        imageView.backgroundColor = UIColor(red: 0.95, green: 0.96, blue: 0.98, alpha: 1.0)
+        return imageView
     }()
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         label.textColor = UIColor(named: "111827") ?? .label
         label.numberOfLines = 1
         return label
     }()
 
-    private let subcategoryLabel: UILabel = {
+    private let categoryLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 10, weight: .regular)
-        label.textColor = UIColor(named: "9CA3AF") ?? .secondaryLabel
+        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.textColor = UIColor(red: 0.61, green: 0.64, blue: 0.69, alpha: 1.0)
         label.numberOfLines = 1
         return label
     }()
 
-    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
 
-    required init?(coder: NSCoder) { fatalError() }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    // MARK: - Setup UI
     private func setupUI() {
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(subcategoryLabel)
+        contentView.addSubview(categoryLabel)
 
         posterImageView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
@@ -62,29 +59,28 @@ class MovieCollectionViewCell: UICollectionViewCell {
             make.left.right.equalToSuperview()
         }
 
-        subcategoryLabel.snp.makeConstraints { make in
+        categoryLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.left.right.equalToSuperview()
             make.bottom.lessThanOrEqualToSuperview()
         }
     }
 
-    // MARK: - Configure
     func configure(with movie: Movie) {
-        titleLabel.text = movie.title ?? ""
+        titleLabel.text = movie.name
         
-        // Формирование названия подкатегории / жанра
-        if let subcategories = movie.categories, !subcategories.isEmpty {
-            subcategoryLabel.text = subcategories.compactMap { $0.name }.joined(separator: " • ")
+        // Подзаголовок: имя первого жанра или типа фильма (например "Мультсериал")
+        if let genreName = movie.genres?.first?.name {
+            categoryLabel.text = genreName
         } else {
-            subcategoryLabel.text = ""
+            categoryLabel.text = movie.movieType ?? ""
         }
 
         // Загрузка постера
         if let link = movie.poster?.link, let url = URL(string: link) {
-            posterImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "posterPlaceholder"))
+            posterImageView.sd_setImage(with: url, placeholderImage: nil)
         } else {
-            posterImageView.image = UIImage(named: "posterPlaceholder")
+            posterImageView.image = nil
         }
     }
 }

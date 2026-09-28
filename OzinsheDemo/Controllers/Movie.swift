@@ -71,6 +71,13 @@ nonisolated struct Movie: Codable, Sendable {
         let movieId: Int?
     }
     
+    struct Banner: Decodable {
+        let id: Int
+        let link: String?
+        let title: String?
+        let movie: Movie?
+    }
+    
     nonisolated struct Category: Codable, Sendable {
         let id: Int
         let name: String

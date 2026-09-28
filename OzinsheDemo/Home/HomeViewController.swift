@@ -300,10 +300,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         case .moviesCategory:
             return 288
         case .genres, .ageCategory:
-            return 160
+            return 90 
         }
     }
-
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView()
     }

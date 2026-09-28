@@ -67,7 +67,9 @@ class AgeCategoryTableViewCell: UITableViewCell {
 
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(12)
-            make.left.right.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.height.equalTo(34) 
+            make.bottom.equalToSuperview().offset(-12)
         }
     }
 
