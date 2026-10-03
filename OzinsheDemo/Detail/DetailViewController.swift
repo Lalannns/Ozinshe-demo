@@ -90,10 +90,11 @@ class DetailViewController: UIViewController {
     }()
     
     private lazy var favoriteButton: UIButton = {
-        let btn = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        btn.setImage(UIImage(systemName: "bookmark", withConfiguration: config), for: .normal)
+        let btn = UIButton(type: .custom)
+        let rawImg = UIImage(named: "Bookmark-Outline")?.withRenderingMode(.alwaysTemplate)
+        btn.setImage(rawImg, for: .normal)
         btn.tintColor = .white
+        btn.imageView?.contentMode = .scaleAspectFit
         btn.addTarget(self, action: #selector(favoriteTapped), for: .touchUpInside)
         return btn
     }()
@@ -113,20 +114,22 @@ class DetailViewController: UIViewController {
         btn.setImage(UIImage(systemName: "play.fill", withConfiguration: config), for: .normal)
         btn.tintColor = .white
         btn.backgroundColor = primaryPurple
-        btn.layer.cornerRadius = 28
+        btn.layer.cornerRadius = 28 // 56x56 dimensions
+        btn.layer.masksToBounds = false
         btn.layer.shadowColor = primaryPurple.cgColor
         btn.layer.shadowOffset = CGSize(width: 0, height: 6)
-        btn.layer.shadowRadius = 16
-        btn.layer.shadowOpacity = 0.6
+        btn.layer.shadowRadius = 14
+        btn.layer.shadowOpacity = 0.45
         btn.addTarget(self, action: #selector(playTapped), for: .touchUpInside)
         return btn
     }()
     
     private lazy var shareButton: UIButton = {
-        let btn = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        btn.setImage(UIImage(systemName: "square.and.arrow.up", withConfiguration: config), for: .normal)
+        let btn = UIButton(type: .custom)
+        let rawImg = UIImage(named: "Share-Outline")?.withRenderingMode(.alwaysTemplate)
+        btn.setImage(rawImg, for: .normal)
         btn.tintColor = .white
+        btn.imageView?.contentMode = .scaleAspectFit
         btn.addTarget(self, action: #selector(shareTapped), for: .touchUpInside)
         return btn
     }()
@@ -345,7 +348,7 @@ class DetailViewController: UIViewController {
         
         SVProgressHUD.show()
         
-        // 1. Детали фильма
+        // 1. Movie details
         AF.request("\(URLs.MOVIE_DETAIL_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: Movie.self) { [weak self] response in
@@ -356,7 +359,7 @@ class DetailViewController: UIViewController {
                 }
             }
             
-        // 2. Скриншоты
+        // 2. Screenshots
         AF.request("\(URLs.SCREENSHOTS_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: [Screenshot].self) { [weak self] response in
@@ -366,7 +369,7 @@ class DetailViewController: UIViewController {
                 }
             }
             
-        // 3. Похожие фильмы с отладкой
+        // 3. Similar movies
         AF.request("\(URLs.SIMILAR_MOVIES_URL)\(id)", method: .get, headers: headers)
             .validate()
             .responseDecodable(of: [Movie].self) { [weak self] response in
@@ -374,24 +377,14 @@ class DetailViewController: UIViewController {
                 
                 switch response.result {
                 case .success(let similar):
-                    print("✅ Загружено похожих фильмов: \(similar.count)")
                     self.similarMovies = similar
-                    
                     DispatchQueue.main.async {
                         self.similarCV.reloadData()
                     }
-                    
                 case .failure(let error):
-                    print("❌ Ошибка загрузки похожих фильмов (Status \(response.response?.statusCode ?? 0)):")
-                    print(error)
-                    
-                    // Если произошла ошибка декодирования JSON:
-                    if let data = response.data, let jsonString = String(data: data, encoding: .utf8) {
-                        print("📦 Сырой ответ API:\n\(jsonString)")
-                    }
+                    print("Error loading similar movies: \(error)")
                 }
             }
-        
     }
     
     private func updateUI(with movie: Movie) {
@@ -417,11 +410,11 @@ class DetailViewController: UIViewController {
         }
         
         let isFav = movie.favorite ?? false
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        favoriteButton.setImage(UIImage(systemName: isFav ? "bookmark.fill" : "bookmark", withConfiguration: config), for: .normal)
+        let favoriteImageName = isFav ? "Bookmark-Filled" : "Bookmark-Outline"
+        let favImage = UIImage(named: favoriteImageName)?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(favImage, for: .normal)
         favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
         
-        // Управление видимостью блока эпизодов и констреинтами
         episodesRowView.isHidden = !isSeries
         dividerLine2.isHidden = !isSeries
         
@@ -504,28 +497,38 @@ class DetailViewController: UIViewController {
             make.width.height.equalTo(32)
         }
         
+        // MARK: - Expanded Spacing Hero Action Controls
+
         playButton.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(cardContainerView.snp.top).offset(-32)
             make.width.height.equalTo(56)
         }
-        
+
         favoriteButton.snp.makeConstraints { make in
-            make.trailing.equalTo(playButton.snp.leading).offset(-36)
+            // Increased horizontal distance to match Figma spacing
+            make.trailing.equalTo(playButton.snp.leading).offset(-68)
             make.centerY.equalTo(playButton).offset(-6)
             make.width.height.equalTo(32)
         }
-        
+
         favoriteLabel.snp.makeConstraints { make in
             make.top.equalTo(favoriteButton.snp.bottom).offset(2)
             make.centerX.equalTo(favoriteButton)
         }
-        
+
         shareButton.snp.makeConstraints { make in
-            make.leading.equalTo(playButton.snp.trailing).offset(36)
+            // Increased horizontal distance to match Figma spacing
+            make.leading.equalTo(playButton.snp.trailing).offset(68)
             make.centerY.equalTo(playButton).offset(-6)
             make.width.height.equalTo(32)
         }
-        
+
+        shareLabel.snp.makeConstraints { make in
+            make.top.equalTo(shareButton.snp.bottom).offset(2)
+            make.centerX.equalTo(shareButton)
+        }
+
         shareLabel.snp.makeConstraints { make in
             make.top.equalTo(shareButton.snp.bottom).offset(2)
             make.centerX.equalTo(shareButton)
@@ -670,12 +673,11 @@ class DetailViewController: UIViewController {
         ]
         
         let isCurrentlyFav = movie.favorite ?? false
+        let parameters: [String: Any] = ["movieId": movie.id]
         
         SVProgressHUD.show()
         
         if isCurrentlyFav {
-            let parameters: [String: Any] = ["movieId": movie.id]
-            
             AF.request(
                 URLs.DELETE_FAVORITES_URL,
                 method: .delete,
@@ -691,8 +693,6 @@ class DetailViewController: UIViewController {
                 }
             }
         } else {
-            let parameters: [String: Any] = ["movieId": movie.id]
-            
             AF.request(
                 URLs.ADD_FAVORITES_URL,
                 method: .post,
@@ -713,8 +713,9 @@ class DetailViewController: UIViewController {
     private func updateFavoriteState(isFav: Bool) {
         movie?.favorite = isFav
         
-        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
-        favoriteButton.setImage(UIImage(systemName: isFav ? "bookmark.fill" : "bookmark", withConfiguration: config), for: .normal)
+        let favoriteImageName = isFav ? "Bookmark-Filled" : "Bookmark-Outline"
+        let favImage = UIImage(named: favoriteImageName)?.withRenderingMode(.alwaysTemplate)
+        favoriteButton.setImage(favImage, for: .normal)
         favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
         
         NotificationCenter.default.post(name: NSNotification.Name("FavoriteStateChanged"), object: nil)
@@ -738,11 +739,11 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func episodesTapped() {
-        // Переход к экрану серий / сезонов
+        // Handle episodes tap
     }
     
     @objc private func similarAllTapped() {
-        // Переход к экрану полного списка похожих фильмов
+        // Handle similar all tap
     }
 }
 
