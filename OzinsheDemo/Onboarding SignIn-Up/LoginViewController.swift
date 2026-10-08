@@ -5,6 +5,7 @@
 //  Created by Allan Auezkhan on 04.08.2026.
 //
 
+
 import UIKit
 import SnapKit
 import Alamofire
@@ -176,8 +177,6 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .appBackground
         setupUI()
-            
-        
     }
     
     // MARK: - Layout Setup
@@ -262,15 +261,19 @@ class LoginViewController: UIViewController {
         }
     }
     
-    // MARK: - Actions
+    // MARK: - Navigation & Actions
     
     private func startApp() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let delegate = windowScene.delegate as? SceneDelegate,
+              let window = delegate.window else { return }
+        
         let mainTabBar = TabBarViewController()
-        mainTabBar.modalPresentationStyle = .fullScreen
-        present(mainTabBar, animated: true)
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
+            window.rootViewController = mainTabBar
+        }
     }
 
-    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -286,7 +289,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func loginButtonTapped() {
-        guard let email = emailTextField.text, !email.isEmpty,
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !email.isEmpty,
               let password = passwordTextField.text, !password.isEmpty else {
             SVProgressHUD.showError(withStatus: "Fill in all fields")
             return
@@ -297,22 +300,38 @@ class LoginViewController: UIViewController {
             "password": password
         ]
         
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        
         SVProgressHUD.show()
         
-        AF.request(URLs.SIGN_IN_URL, method: .post, parameters: parameters, encoding: JSONEncoding.default).responseData { [weak self] response in
+        AF.request(
+            URLs.SIGN_IN_URL,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers,
+            interceptor: nil
+        ).responseData { [weak self] response in
             SVProgressHUD.dismiss()
-            
             guard let self = self else { return }
             
-            if response.response?.statusCode == 200 {
-                let json = JSON(response.data!)
-                if let token = json["accessToken"].string {
-                    UserDefaults.standard.set(token, forKey: "accessToken")
-                    Storage.sharedInstance.accessToken = token
-                    
-                    self.startApp()
+            let statusCode = response.response?.statusCode ?? 0
+            
+            if statusCode == 200 {
+                if let data = response.data {
+                    let json = JSON(data)
+                    if let token = json["accessToken"].string {
+                        UserDefaults.standard.set(token, forKey: "accessToken")
+                        Storage.sharedInstance.accessToken = token
+                        self.startApp()
+                    }
                 }
             } else {
+                if let data = response.data, let body = String(data: data, encoding: .utf8) {
+                    print("Login Error (\(statusCode)): \(body)")
+                }
                 SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
             }
         }
@@ -323,4 +342,3 @@ class LoginViewController: UIViewController {
         navigationController?.pushViewController(signInVC, animated: true)
     }
 }
-

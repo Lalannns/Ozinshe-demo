@@ -451,21 +451,24 @@ class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
 
+    // Fix in ProfileViewController
     private func performLogout() {
-        // Clear token & stored user data
+        // 1. Clear storage
         UserDefaults.standard.removeObject(forKey: "accessToken")
         UserDefaults.standard.removeObject(forKey: "userEmail")
-        Storage.sharedInstance.accessToken = ""
-
-        // Navigate back to Onboarding/Login root
+        UserDefaults.standard.synchronize()
+        
+        Storage.sharedInstance.accessToken =  ""
+        
+        // 2. Reset Root View Controller directly to LoginViewController
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let delegate = windowScene.delegate as? SceneDelegate,
               let window = delegate.window else { return }
 
-        let onboardingVC = UINavigationController(rootViewController: OnboardingViewController())
+        let loginVC = UINavigationController(rootViewController: LoginViewController())
 
         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve) {
-            window.rootViewController = onboardingVC
+            window.rootViewController = loginVC
         }
     }
 }

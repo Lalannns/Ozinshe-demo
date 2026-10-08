@@ -209,13 +209,11 @@ class SignInViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Hide the navigation bar so only the custom back button shows
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Re-enable navigation bar for subsequent screens if needed
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
@@ -327,11 +325,16 @@ class SignInViewController: UIViewController {
     }
     
     @objc private func signInTapped() {
-        navigationController?.popViewController(animated: true)
+        if let navigationController = navigationController, navigationController.viewControllers.count > 1 {
+            navigationController.popViewController(animated: true)
+        } else {
+            let loginVC = LoginViewController()
+            navigationController?.pushViewController(loginVC, animated: true)
+        }
     }
     
     @objc private func registerButtonTapped() {
-        guard let email = emailTextField.text, !email.isEmpty,
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !email.isEmpty,
               let password = passwordTextField.text, !password.isEmpty,
               let confirmPassword = confirmPasswordTextField.text, !confirmPassword.isEmpty else {
             SVProgressHUD.showError(withStatus: "Fill in all fields")
@@ -343,25 +346,42 @@ class SignInViewController: UIViewController {
             return
         }
         
+        // 1. Clear any residual token in local storage
+        UserDefaults.standard.removeObject(forKey: "accessToken")
+        Storage.sharedInstance.accessToken = ""
+        
         let parameters: [String: Any] = [
             "email": email,
             "password": password
         ]
         
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json"
+        ]
+        
         SVProgressHUD.show()
         
-        AF.request(URLs.SIGN_UP_URL, method: .post, parameters: parameters, encoding: JSONEncoding.default).responseData { [weak self] response in
+        AF.request(
+            URLs.SIGN_UP_URL,
+            method: .post,
+            parameters: parameters,
+            encoding: JSONEncoding.default,
+            headers: headers,
+            interceptor: nil // Bypasses custom session interceptors
+        ).responseData { [weak self] response in
             SVProgressHUD.dismiss()
-            
             guard let self = self else { return }
             
-            if response.response?.statusCode == 200 {
-                let json = JSON(response.data!)
+            let statusCode = response.response?.statusCode ?? 0
+            
+            if statusCode == 200 || statusCode == 201 {
+                guard let data = response.data else { return }
+                let json = JSON(data)
+                
                 if let token = json["accessToken"].string {
                     UserDefaults.standard.set(token, forKey: "accessToken")
                     Storage.sharedInstance.accessToken = token
                     
-                    // Transition root view controller safely
                     guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                           let delegate = windowScene.delegate as? SceneDelegate,
                           let window = delegate.window else { return }
@@ -372,6 +392,9 @@ class SignInViewController: UIViewController {
                     }
                 }
             } else {
+                if let data = response.data, let body = String(data: data, encoding: .utf8) {
+                    print("Sign Up Error (\(statusCode)): \(body)")
+                }
                 SVProgressHUD.showError(withStatus: "CONECTION_ERROR".localized())
             }
         }
