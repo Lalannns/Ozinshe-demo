@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Alamofire
+import SDWebImage
 
 // MARK: - Main Screen Section Types
 enum MainSectionType {
@@ -33,7 +34,6 @@ class HomeViewController: UIViewController {
     // MARK: - UI Elements
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "logoMain")?.withRenderingMode(.alwaysOriginal)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -57,9 +57,6 @@ class HomeViewController: UIViewController {
 
     private let refreshControl = UIRefreshControl()
 
-    // MARK: - API Base Config
-    private let baseURL = "https://apiozinshe.mobydev.kz/core/V1"
-
     // MARK: - Data Properties
     private var sectionData: [MainSectionType] = []
     
@@ -73,27 +70,43 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        updateLogoImage()
         setupRefreshControl()
         loadAllData()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateLogoImage()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateLogoImage()
+        }
     }
 
     // MARK: - Setup UI
     private func setupUI() {
         view.backgroundColor = UIColor(named: "Background") ?? .systemBackground
         
-        let logoContainer = UIView()
-        logoContainer.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
-            make.left.top.bottom.equalToSuperview()
             make.width.equalTo(100)
             make.height.equalTo(32)
         }
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoContainer)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoImageView)
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+
+    private func updateLogoImage() {
+        let isDark = traitCollection.userInterfaceStyle == .dark
+        let imageName = isDark ? "logo-dark" : "logo-light"
+        logoImageView.image = UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal)
     }
 
     private func setupRefreshControl() {
@@ -102,49 +115,109 @@ class HomeViewController: UIViewController {
         tableView.refreshControl = refreshControl
     }
 
+    private func setupSDWebImage() {
+        let token = UserDefaults.standard.string(forKey: "accessToken") ?? ""
+        SDWebImageDownloader.shared.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+    }
+
     @objc private func handleRefresh() {
         loadAllData()
     }
 
-    // MARK: - Network Requests
+    // MARK: - Network Requests Coordinator
     private func loadAllData() {
+        setupSDWebImage()
         let dispatchGroup = DispatchGroup()
-        
+
         dispatchGroup.enter()
-        fetchMainBanners { [weak self] banners in
-            self?.mainBanners = banners
-            dispatchGroup.leave()
-        }
-        
+        downloadMainBanners { dispatchGroup.leave() }
+
         dispatchGroup.enter()
-        fetchUserHistory { [weak self] history in
-            self?.userHistory = history
-            dispatchGroup.leave()
-        }
-        
+        downloadHistory { dispatchGroup.leave() }
+
         dispatchGroup.enter()
-        fetchMainMovies { [weak self] categories in
-            self?.mainMovies = categories
-            dispatchGroup.leave()
-        }
-        
+        downloadMainMovies { dispatchGroup.leave() }
+
         dispatchGroup.enter()
-        fetchGenres { [weak self] genresList in
-            self?.genres = genresList
-            dispatchGroup.leave()
-        }
-        
+        downloadGenres { dispatchGroup.leave() }
+
         dispatchGroup.enter()
-        fetchAgeCategories { [weak self] ages in
-            self?.ageCategories = ages
-            dispatchGroup.leave()
-        }
+        downloadCategoryAges { dispatchGroup.leave() }
 
         dispatchGroup.notify(queue: .main) { [weak self] in
-            self?.refreshControl.endRefreshing()
-            self?.buildSections()
-            self?.tableView.reloadData()
+            guard let self = self else { return }
+            self.refreshControl.endRefreshing()
+            self.buildSections()
+            self.tableView.reloadData()
         }
+    }
+
+    // MARK: - Headers
+    private func getAuthHeaders() -> HTTPHeaders {
+        let token = UserDefaults.standard.string(forKey: "accessToken") ?? ""
+        return [
+            "Authorization": "Bearer \(token)",
+            "Accept-Language": "qs"
+        ]
+    }
+
+    // MARK: - API Calls
+    func downloadMainBanners(completion: (() -> Void)? = nil) {
+        let url = URLs.BASE_URL + "main/banners"
+        AF.request(url, method: .get, headers: getAuthHeaders())
+            .validate()
+            .responseDecodable(of: [Banner].self) { [weak self] response in
+                defer { completion?() }
+                if case .success(let banners) = response.result {
+                    self?.mainBanners = banners
+                }
+            }
+    }
+
+    func downloadHistory(completion: (() -> Void)? = nil) {
+        let url = URLs.BASE_URL + "history/"
+        AF.request(url, method: .get, headers: getAuthHeaders())
+            .validate()
+            .responseDecodable(of: [Movie].self) { [weak self] response in
+                defer { completion?() }
+                if case .success(let history) = response.result {
+                    self?.userHistory = history
+                }
+            }
+    }
+
+    func downloadMainMovies(completion: (() -> Void)? = nil) {
+        AF.request(URLs.MAIN_MOVIES_URL, method: .get, headers: getAuthHeaders())
+            .validate()
+            .responseDecodable(of: [MainMovies].self) { [weak self] response in
+                defer { completion?() }
+                if case .success(let categories) = response.result {
+                    self?.mainMovies = categories
+                }
+            }
+    }
+
+    func downloadGenres(completion: (() -> Void)? = nil) {
+        AF.request(URLs.GENRES_URL, method: .get, headers: getAuthHeaders())
+            .validate()
+            .responseDecodable(of: [Genre].self) { [weak self] response in
+                defer { completion?() }
+                if case .success(let genres) = response.result {
+                    self?.genres = genres
+                }
+            }
+    }
+
+    func downloadCategoryAges(completion: (() -> Void)? = nil) {
+        let url = URLs.BASE_URL + "category-ages"
+        AF.request(url, method: .get, headers: getAuthHeaders())
+            .validate()
+            .responseDecodable(of: [AgeCategory].self) { [weak self] response in
+                defer { completion?() }
+                if case .success(let ages) = response.result {
+                    self?.ageCategories = ages
+                }
+            }
     }
 
     // MARK: - Section Assembly
@@ -159,86 +232,32 @@ class HomeViewController: UIViewController {
             sectionData.append(.userHistory(userHistory))
         }
 
-        for (index, category) in mainMovies.enumerated() {
-            sectionData.append(.moviesCategory(category))
+        var addedMovieCategoryCount = 0
+
+        for category in mainMovies {
+            guard let movies = category.movies, !movies.isEmpty else { continue }
             
-            if index == 1 && !genres.isEmpty {
+            sectionData.append(.moviesCategory(category))
+            addedMovieCategoryCount += 1
+
+            if addedMovieCategoryCount == 2 && !genres.isEmpty {
                 sectionData.append(.genres(genres))
             }
-            
-            if index == 4 && !ageCategories.isEmpty {
+
+            if addedMovieCategoryCount == 5 && !ageCategories.isEmpty {
                 sectionData.append(.ageCategory(ageCategories))
             }
         }
-    }
 
-    // MARK: - API Calls
-    private func getAuthHeaders() -> HTTPHeaders {
-        let token = UserDefaults.standard.string(forKey: "accessToken") ?? ""
-        return [
-            "Authorization": "Bearer \(token)",
-            "Accept-Language": "qs"
-        ]
-    }
+        let hasGenres = sectionData.contains { if case .genres = $0 { return true }; return false }
+        if !hasGenres && !genres.isEmpty {
+            sectionData.append(.genres(genres))
+        }
 
-    private func fetchMainBanners(completion: @escaping ([Banner]) -> Void) {
-        let url = "\(baseURL)/banners"
-        AF.request(url, method: .get, headers: getAuthHeaders())
-            .validate()
-            .responseDecodable(of: [Banner].self) { response in
-                switch response.result {
-                case .success(let banners): completion(banners)
-                case .failure: completion([])
-                }
-            }
-    }
-
-    private func fetchUserHistory(completion: @escaping ([Movie]) -> Void) {
-        let url = "\(baseURL)/history"
-        AF.request(url, method: .get, headers: getAuthHeaders())
-            .validate()
-            .responseDecodable(of: [Movie].self) { response in
-                switch response.result {
-                case .success(let history): completion(history)
-                case .failure: completion([])
-                }
-            }
-    }
-
-    private func fetchMainMovies(completion: @escaping ([MainMovies]) -> Void) {
-        let url = "\(baseURL)/movies/main"
-        AF.request(url, method: .get, headers: getAuthHeaders())
-            .validate()
-            .responseDecodable(of: [MainMovies].self) { response in
-                switch response.result {
-                case .success(let categories): completion(categories)
-                case .failure: completion([])
-                }
-            }
-    }
-
-    private func fetchGenres(completion: @escaping ([Genre]) -> Void) {
-        let url = "\(baseURL)/genres"
-        AF.request(url, method: .get, headers: getAuthHeaders())
-            .validate()
-            .responseDecodable(of: [Genre].self) { response in
-                switch response.result {
-                case .success(let genres): completion(genres)
-                case .failure: completion([])
-                }
-            }
-    }
-
-    private func fetchAgeCategories(completion: @escaping ([AgeCategory]) -> Void) {
-        let url = "\(baseURL)/category-ages"
-        AF.request(url, method: .get, headers: getAuthHeaders())
-            .validate()
-            .responseDecodable(of: [AgeCategory].self) { response in
-                switch response.result {
-                case .success(let ages): completion(ages)
-                case .failure: completion([])
-                }
-            }
+        let hasAgeCategories = sectionData.contains { if case .ageCategory = $0 { return true }; return false }
+        if !hasAgeCategories && !ageCategories.isEmpty {
+            sectionData.append(.ageCategory(ageCategories))
+        }
     }
 }
 
@@ -300,9 +319,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         case .moviesCategory:
             return 288
         case .genres, .ageCategory:
-            return 90 
+            return 168
         }
     }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UIView()
     }
@@ -318,6 +338,8 @@ extension HomeViewController: MainTableViewCellDelegate, MainBannerTableViewCell
     func didSelectMovie(_ movie: Movie) {
         let detailVC = DetailViewController()
         detailVC.movie = movie
+        detailVC.movieID = movie.id
+        detailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(detailVC, animated: true)
     }
     

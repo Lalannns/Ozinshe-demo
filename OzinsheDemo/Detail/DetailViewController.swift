@@ -319,7 +319,16 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         
-        if let id = movieID {
+        // 1. Render immediate preview data if movie object was passed
+        if let existingMovie = movie {
+            updateUI(with: existingMovie)
+        }
+        
+        // 2. Resolve target ID from either movieID or movie.id
+        let targetID = movieID ?? movie?.id
+        
+        // 3. Fetch full details, screenshots, and similar movies
+        if let id = targetID {
             loadData(id: id)
         }
     }
@@ -497,7 +506,7 @@ class DetailViewController: UIViewController {
             make.width.height.equalTo(32)
         }
         
-        // MARK: - Expanded Spacing Hero Action Controls
+        // Hero Action Controls (Centered Layout)
 
         playButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -506,7 +515,6 @@ class DetailViewController: UIViewController {
         }
 
         favoriteButton.snp.makeConstraints { make in
-            // Increased horizontal distance to match Figma spacing
             make.trailing.equalTo(playButton.snp.leading).offset(-68)
             make.centerY.equalTo(playButton).offset(-6)
             make.width.height.equalTo(32)
@@ -518,15 +526,9 @@ class DetailViewController: UIViewController {
         }
 
         shareButton.snp.makeConstraints { make in
-            // Increased horizontal distance to match Figma spacing
             make.leading.equalTo(playButton.snp.trailing).offset(68)
             make.centerY.equalTo(playButton).offset(-6)
             make.width.height.equalTo(32)
-        }
-
-        shareLabel.snp.makeConstraints { make in
-            make.top.equalTo(shareButton.snp.bottom).offset(2)
-            make.centerX.equalTo(shareButton)
         }
 
         shareLabel.snp.makeConstraints { make in

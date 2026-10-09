@@ -5,192 +5,156 @@
 //  Created by Allan Auezkhan on 12.07.2026.
 //
 
-
 import UIKit
 import SnapKit
 import SDWebImage
 
 class MovieTableViewCell: UITableViewCell {
-    
+
     static let identifier = "MovieTableViewCell"
-    
-    // MARK: - UI Components
-    
-    lazy var posterImageView: UIImageView = {
+
+    // MARK: - UI Elements
+    private let posterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 8
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
+        imageView.backgroundColor = .systemGray6
         return imageView
     }()
-    
-    lazy var titleLabel: UILabel = {
+
+    private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "SFProDisplay-Bold", size: 14) ?? .boldSystemFont(ofSize: 14)
-        label.textColor = UIColor(red: 17/255, green: 24/255, blue: 39/255, alpha: 1.0) // #111827
+        label.textColor = UIColor { trait in
+            return trait.userInterfaceStyle == .dark
+                ? .white
+                : UIColor(red: 17/255, green: 24/255, blue: 39/255, alpha: 1.0) // #111827
+        }
+        label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        label.numberOfLines = 2
+        return label
+    }()
+
+    private let subTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor { trait in
+            return trait.userInterfaceStyle == .dark
+                ? UIColor(red: 156/255, green: 163/255, blue: 175/255, alpha: 1.0) // #9CA3AF
+                : UIColor(red: 107/255, green: 114/255, blue: 128/255, alpha: 1.0) // #6B7280 for readable contrast in light mode
+        }
+        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.numberOfLines = 1
         return label
     }()
-    
-    lazy var subtitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: "SFProDisplay-Regular", size: 12) ?? .systemFont(ofSize: 12)
-        label.textColor = UIColor(red: 156/255, green: 163/255, blue: 175/255, alpha: 1.0) // #9CA3AF
-        label.numberOfLines = 1
-        return label
+
+    private lazy var playButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.title = "Қарау"
+        config.image = UIImage(systemName: "play.fill")
+        config.imagePadding = 6
+        config.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 9, weight: .bold)
+        
+        // Primary Purple Text & Icon
+        let purpleColor = UIColor(red: 151/255, green: 83/255, blue: 224/255, alpha: 1.0) // #9753E0
+        config.baseForegroundColor = purpleColor
+        
+        // Proper Configuration Background (Fixes Pink Blending Glitch)
+        config.background.backgroundColor = UIColor(red: 243/255, green: 232/255, blue: 255/255, alpha: 1.0) // #F3E8FF
+        config.background.cornerRadius = 8
+        
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12)
+        
+        let button = UIButton(configuration: config)
+        button.isUserInteractionEnabled = false
+        return button
     }()
-    
-    lazy var playView: UIView = {
+
+    private let lineView: UIView = {
         let view = UIView()
-        let imageView = UIImageView(image: UIImage(named: "Play-Filled"))
-        let label = UILabel()
-        
-        view.backgroundColor = UIColor(red: 248/255, green: 238/255, blue: 255/255, alpha: 1.0) // #F8EEFF
-        view.layer.cornerRadius = 8
-        
-        label.text = "Қарау"
-        label.font = UIFont(name: "SFProDisplay-Bold", size: 12) ?? .boldSystemFont(ofSize: 12)
-        label.textColor = UIColor(red: 151/255, green: 83/255, blue: 240/255, alpha: 1.0) // #9753F0
-        
-        view.addSubview(imageView)
-        view.addSubview(label)
-        
-        imageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(12)
-            make.centerY.equalToSuperview()
-            make.size.equalTo(16)
+        view.backgroundColor = UIColor { trait in
+            return trait.userInterfaceStyle == .dark
+                ? UIColor(red: 31/255, green: 41/255, blue: 55/255, alpha: 1.0) // #1F2937
+                : UIColor(red: 229/255, green: 231/255, blue: 235/255, alpha: 1.0) // #E5E7EB
         }
-        
-        label.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.left.equalTo(imageView.snp.right).offset(4)
-            make.right.equalToSuperview().inset(12)
-        }
-        
         return view
     }()
-    
-    lazy var bottomView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(red: 229/255, green: 231/255, blue: 235/255, alpha: 1.0) // #E5E7EB
-        return view
-    }()
-    
+
     // MARK: - Init
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Setup UI & Constraints
-    
-    func setupUI() {
-        backgroundColor = .clear
+
+    // MARK: - Layout Setup
+    private func setupUI() {
         selectionStyle = .none
-        
+        backgroundColor = .clear
+
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(subtitleLabel)
-        contentView.addSubview(playView)
-        contentView.addSubview(bottomView)
-        
-        // 1. Poster ImageView
+        contentView.addSubview(subTitleLabel)
+        contentView.addSubview(playButton)
+        contentView.addSubview(lineView)
+
+        // Poster 71x104
         posterImageView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
-            make.leading.equalToSuperview().offset(24)
+            make.left.equalToSuperview().offset(24)
             make.width.equalTo(71)
             make.height.equalTo(104)
-            make.bottom.lessThanOrEqualToSuperview().offset(-16)
         }
-        
-        // 2. Title Label
+
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(posterImageView.snp.top)
-            make.leading.equalTo(posterImageView.snp.trailing).offset(17)
-            make.trailing.equalToSuperview().offset(-24)
+            make.left.equalTo(posterImageView.snp.right).offset(16)
+            make.right.equalToSuperview().offset(-24)
         }
-        
-        // 3. Subtitle Label
-        subtitleLabel.snp.makeConstraints { make in
+
+        subTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.equalTo(titleLabel.snp.leading)
-            make.trailing.equalTo(titleLabel.snp.trailing)
+            make.left.equalTo(titleLabel.snp.left)
+            make.right.equalTo(titleLabel.snp.right)
         }
-        
-        // 4. Play View
-        playView.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.leading)
-            make.top.equalTo(subtitleLabel.snp.bottom).offset(12)
+
+        playButton.snp.makeConstraints { make in
+            make.top.equalTo(subTitleLabel.snp.bottom).offset(8)
+            make.left.equalTo(titleLabel.snp.left)
             make.height.equalTo(26)
         }
-        
-        // 5. Divider Line
-        bottomView.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.leading.trailing.equalToSuperview().inset(24)
+
+        // Separator line inset by 24pt
+        lineView.snp.makeConstraints { make in
+            make.top.equalTo(posterImageView.snp.bottom).offset(16)
+            make.left.equalToSuperview().offset(24)
+            make.right.equalToSuperview().offset(-24)
             make.bottom.equalToSuperview()
+            make.height.equalTo(1)
         }
     }
-    
-    // MARK: - Data Configuration
-    
+
+    // MARK: - Configure
     func configure(with movie: Movie) {
-        // 1. Title
         titleLabel.text = movie.displayTitle
         
-        // 2. Subtitle (Year & Categories/Genres)
-        let yearText = (movie.year != nil && movie.year != 0) ? "\(movie.year!)" : ""
-        let subcategoriesText = movie.displaySubcategories
-        
-        if !yearText.isEmpty && !subcategoriesText.isEmpty {
-            subtitleLabel.text = "\(yearText) • \(subcategoriesText)"
-        } else if !subcategoriesText.isEmpty {
-            subtitleLabel.text = subcategoriesText
-        } else if !yearText.isEmpty {
-            subtitleLabel.text = yearText
+        let yearString = movie.year != nil ? "\(movie.year!)" : ""
+        let categoryName = movie.displaySubcategories.isEmpty
+            ? (movie.categories?.first?.name ?? "")
+            : movie.displaySubcategories
+            
+        subTitleLabel.text = [yearString, categoryName].filter { !$0.isEmpty }.joined(separator: " • ")
+
+        if let link = movie.poster?.link ?? movie.cover?.link, let url = link.fixedURL {
+            posterImageView.sd_setImage(
+                with: url,
+                placeholderImage: UIImage(named: "posterPlaceholder"),
+                options: [.retryFailed, .highPriority]
+            )
         } else {
-            subtitleLabel.text = "Фильм"
-        }
-        
-        // 3. Poster Image Loading
-        posterImageView.image = nil
-        posterImageView.backgroundColor = UIColor(red: 243/255, green: 244/255, blue: 246/255, alpha: 1.0)
-        
-        if let posterLink = movie.poster?.link, !posterLink.isEmpty {
-            var fullPath = posterLink
-            
-            // Fix 1: Replace dead/unresolvable backend domain with active host
-            if fullPath.contains("api.ozinshe.com") {
-                fullPath = fullPath.replacingOccurrences(of: "api.ozinshe.com", with: "apiozinshe.mobydev.kz")
-            }
-            
-            // Fix 2: Prepend base URL if it's a relative path
-            if !fullPath.hasPrefix("http://") && !fullPath.hasPrefix("https://") {
-                let formattedPath = fullPath.hasPrefix("/") ? fullPath : "/\(fullPath)"
-                fullPath = "https://apiozinshe.mobydev.kz\(formattedPath)"
-            }
-            
-            // Fix 3: Enforce HTTPS for ATS compliance
-            if fullPath.hasPrefix("http://") {
-                fullPath = fullPath.replacingOccurrences(of: "http://", with: "https://")
-            }
-            
-            // Fix 4: Encode special characters/spaces
-            if let encodedPath = fullPath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-               let url = URL(string: encodedPath) {
-                posterImageView.sd_setImage(
-                    with: url,
-                    placeholderImage: UIImage(named: "posterPlaceholder"),
-                    options: [.retryFailed, .continueInBackground, .lowPriority]
-                )
-            } else {
-                print("⚠️ Bad Image URL String: \(fullPath)")
-            }
+            posterImageView.image = UIImage(named: "posterPlaceholder")
         }
     }
 }
