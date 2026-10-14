@@ -100,3 +100,21 @@ nonisolated struct Screenshot: Codable, Sendable {
     let fileId: Int?
 }
 
+
+nonisolated struct Season: Codable, Sendable {
+    let id: Int
+    let number: Int
+    let movieId: Int?
+    let videos: [Video]?
+}
+
+nonisolated struct Video: Codable, Sendable {
+    let id: Int?
+    let number: Int?
+    let link: String?
+    let url: String? // Add as fallback if backend uses 'url'
+    
+    var resolvedLink: String? {
+        return link ?? url
+    }
+}

@@ -24,6 +24,7 @@ class URLs {
     static let CATEGORIES_URL = BASE_URL + "categories"
     static let SEARCH_MOVIES_URL = BASE_URL + "movies/search"
     static let MOVIES_BY_CATEGORY_URL = BASE_URL + "movies"
+    static let SEASONS_URL = BASE_URL + "seasons/"
     
     // Favorites
     static let FAVORITES_URL = BASE_URL + "favorite/"
@@ -38,6 +39,7 @@ class URLs {
     static let MOVIE_DETAIL_URL = BASE_URL + "movies/"
     static let SCREENSHOTS_URL = BASE_URL + "screenshots/"
     static let SIMILAR_MOVIES_URL = BASE_URL + "movies/similar/"
+    
 }
 
 extension String {

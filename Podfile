@@ -14,6 +14,8 @@ target 'OzinsheDemo' do
   pod 'SVProgressHUD'
   pod 'SDWebImage'
   pod 'SnapKit'
+  pod 'YouTubePlayerKit'
+
 
  
 

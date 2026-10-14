@@ -1,0 +1,6 @@
+framework module YouTubePlayerKit {
+  umbrella header "YouTubePlayerKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

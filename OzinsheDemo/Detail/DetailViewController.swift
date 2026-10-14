@@ -404,7 +404,10 @@ class DetailViewController: UIViewController {
         
         let seasons = movie.seasonCount ?? 0
         let series = movie.seriesCount ?? 0
-        let isSeries = movie.movieType == "SERIES"
+        
+        // Check for both SERIES and SERIAL types
+        let typeValue = movie.movieType?.uppercased() ?? ""
+        let isSeries = typeValue == "SERIES" || typeValue == "SERIAL"
         
         let typeText = isSeries ? "\(seasons) сезон, \(series) серия" : "Фильм"
         subTitleLabel.text = "\(yearText) • \(subcatsText) • \(typeText)"
@@ -424,6 +427,7 @@ class DetailViewController: UIViewController {
         favoriteButton.setImage(favImage, for: .normal)
         favoriteLabel.text = isFav ? "Тізімде" : "Тізімге қосу"
         
+        // Show/Hide the episodes row and divider based on whether it's a series/serial
         episodesRowView.isHidden = !isSeries
         dividerLine2.isHidden = !isSeries
         
@@ -653,13 +657,34 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func playTapped() {
-        guard let videoUrlString = movie?.videoUrl, let url = URL(string: videoUrlString) else { return }
-        let player = AVPlayer(url: url)
-        let playerViewController = AVPlayerViewController()
-        playerViewController.player = player
-        present(playerViewController, animated: true) {
-            player.play()
+        if movie?.movieType == "SERIES" || movie?.movieType == "SERIAL" {
+            episodesTapped() // Open the seasons/episodes screen instead of playing directly
+            return
         }
+        
+        // Fallback for regular movies
+        guard let videoUrlString = movie?.videoUrl ?? movie?.video?.link, !videoUrlString.isEmpty else {
+            print("Video URL is missing or nil. Movie type: \(movie?.movieType ?? "unknown")")
+            return
+        }
+        
+        let videoID = extractYouTubeID(from: videoUrlString) ?? videoUrlString
+        let playerVC = YouTubePlayerViewController(videoID: videoID)
+        present(playerVC, animated: true)
+    }
+
+    // Helper utility to parse YouTube video IDs reliably
+    private func extractYouTubeID(from urlString: String) -> String? {
+        if urlString.count == 11, !urlString.contains("/") {
+            return urlString
+        }
+        let pattern = "(?:v=|\\.be/|embed/|live/)([a-zA-Z0-9_-]{11})"
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: urlString, range: NSRange(urlString.startIndex..., in: urlString)),
+              let range = Range(match.range(at: 1), in: urlString) else {
+            return nil
+        }
+        return String(urlString[range])
     }
     
     @objc private func favoriteTapped() {
@@ -741,7 +766,10 @@ class DetailViewController: UIViewController {
     }
     
     @objc private func episodesTapped() {
-        // Handle episodes tap
+        guard let targetID = movieID ?? movie?.id else { return }
+        let seasonsVC = SeasonsViewController()
+        seasonsVC.movieID = targetID
+        navigationController?.pushViewController(seasonsVC, animated: true)
     }
     
     @objc private func similarAllTapped() {
