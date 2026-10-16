@@ -74,19 +74,29 @@ class SeasonsViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = UIColor { trait in
-            return trait.userInterfaceStyle == .dark
-                ? UIColor(red: 11/255, green: 19/255, blue: 43/255, alpha: 1.0)
-                : .white
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            view.backgroundColor = UIColor { trait in
+                return trait.userInterfaceStyle == .dark
+                    ? UIColor(red: 11/255, green: 19/255, blue: 43/255, alpha: 1.0)
+                    : .white
+            }
+            setupUI()
+            
+            if let id = movieID {
+                fetchSeasons(movieId: id)
+            }
         }
-        setupUI()
-        
-        if let id = movieID {
-            fetchSeasons(movieId: id)
+
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            navigationController?.setNavigationBarHidden(true, animated: animated)
         }
-    }
+
+        override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+            navigationController?.setNavigationBarHidden(false, animated: animated)
+        }
 
     // MARK: - Setup UI
 
@@ -98,11 +108,13 @@ class SeasonsViewController: UIViewController {
         view.addSubview(episodesTableView)
 
         customNavBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(44)
         }
 
+        // Match design reference: clean back button without background pill
+        backButton.backgroundColor = .clear
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
@@ -113,10 +125,11 @@ class SeasonsViewController: UIViewController {
             make.center.equalToSuperview()
         }
 
+        // Ensure seasons tab collection view has enough height and spacing
         seasonsCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(customNavBar.snp.bottom).offset(8)
+            make.top.equalTo(customNavBar.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(40)
+            make.height.equalTo(44)
         }
 
         episodesTableView.snp.makeConstraints { make in
