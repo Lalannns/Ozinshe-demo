@@ -1,5 +1,3 @@
-
-https://github.com/user-attachments/assets/0c66e093-73dd-4813-89b1-6aa8e5daab09
 # ÖZINŞE — iOS Streaming App Client
 
 A modern, full-featured iOS movie and series streaming client built 100% programmatically using **UIKit** and **SnapKit**. The application features dynamic content presentation, video streaming playback, dynamic search and categorization, dark/light mode toggling, runtime multi-language localization, and account authentication flows.
@@ -67,4 +65,3 @@ A modern, full-featured iOS movie and series streaming client built 100% program
 - [x] Light & Dark Mode theme switching system
 - [x] Dynamic multi-language localization (Kazakh, English, Russian) via `UISheetPresentationController`
 - [x] Logout handling with root view controller reset transitions
-- [ ] Code refactoring and bug polish pass
