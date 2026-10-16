@@ -6,9 +6,7 @@ A modern, full-featured iOS movie and series streaming client built 100% program
 
 ## 🎥 App Showcase
 
-<p align="center">
-  <video width="320" controls autoplay loop muted src="https://github.com/user-attachments/assets/bff1057e-a43f-4a71-ae03-6bae317c5a8b"></video>
-</p>
+https://github.com/user-attachments/assets/bff1057e-a43f-4a71-ae03-6bae317c5a8b
 
 ---
 
